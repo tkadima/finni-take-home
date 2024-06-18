@@ -1,0 +1,32 @@
+{
+  "name": "finni-take-home",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/material": "^5.15.20",
+    "next": "14.2.4",
+    "react": "^18",
+    "react-dom": "^18",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7",
+    "swr": "^2.2.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.4",
+    "prettier": "^3.3.2",
+    "typescript": "^5"
+  }
+}

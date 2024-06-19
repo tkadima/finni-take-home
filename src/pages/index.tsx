@@ -3,7 +3,7 @@ import { Container, Typography } from '@mui/material';
 import useFetch from '../hooks/useFetch';
 
 const HomePage = () => {
-  const { data, isLoading, isError } = useFetch('/api/sample');
+  const { data, isLoading, isError } = useFetch('/api/patients');
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error loading data</div>;

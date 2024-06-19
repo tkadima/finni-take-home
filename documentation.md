@@ -11,3 +11,19 @@ I used MUI as my UI kit because I was familiar with it and knew I would want to 
 
 Given my limited time, I wanted to make sure my setup worked before delving further into data formatting and seeding. I added a single line of sample data to verify that data could be successfully retrieved from the database to the client. Throughout the process, I ensured proper paths and configurations, and after troubleshooting and adjustments, I successfully ran the development server to verify the setup. This was a good stopping point for the day and I planned to continue on with the data model and seeding the database. 
 
+### Step 3 Patient table migration and seeding 
+I added a migration to create a `patients` table in the database and a seed script to populate it with sample data. I chose to store the `addresses` and `additional_fields` as JSON to avoid creating additional tables and unnecessary joins.
+```sql 
+CREATE TABLE IF NOT EXISTS patients (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  first_name TEXT NOT NULL,
+  middle_name TEXT,
+  last_name TEXT NOT NULL,
+  date_of_birth TEXT NOT NULL,
+  status TEXT CHECK(status IN ('Inquiry', 'Onboarding', 'Active', 'Churned')) NOT NULL,
+  addresses JSON,
+  additional_fields JSON
+);
+```
+
+

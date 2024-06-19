@@ -25,5 +25,7 @@ CREATE TABLE IF NOT EXISTS patients (
   additional_fields JSON
 );
 ```
+### Step 4 display patient data in data table 
+Create a mui data grid table and display the patient data 
 
 

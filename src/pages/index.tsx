@@ -1,4 +1,3 @@
-// pages/index.tsx
 import * as React from 'react';
 import { Container, Typography } from '@mui/material';
 import useFetch from '../hooks/useFetch';
@@ -12,7 +11,12 @@ const HomePage = () => {
   return (
     <Container>
       <Typography variant="h4">Home Page</Typography>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      {
+        data.map((row:any) => <div>
+            <div>id: {row.id}</div>
+            <div>name: { `${row.last_name}, ${row.first_name} ${row.middle_name}`}</div>
+        </div>)
+      }
     </Container>
   );
 };

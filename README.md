@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+# Finni Take Home Project
 
-First, run the development server:
+## Project Setup
 
-```bash
+This project is a Next.js application with a few dependencies and development tools. Follow the steps below to get the project running on your local machine.
+To read about my creative process in building the project, view my [documentation file](documentation.md)
+
+### Prerequisites
+
+- Node.js (version 14.x or later)
+- npm (version 6.x or later) or yarn (version 1.22.x or later)
+
+### Installation
+
+1. Clone the repository:
+
+   ```sh
+   git clone https://github.com/tkadima/finni-take-home.git
+   cd finni-take-home
+   ```
+
+2. Install the dependencies:
+
+   ```sh
+   npm install
+   ```
+
+### Running the Application
+
+To start the development server, run:
+
+```sh
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This will start the development server on [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Building the Application
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+To build the application for production, run:
 
-## Learn More
+```sh
+npm run build
+```
 
-To learn more about Next.js, take a look at the following resources:
+### Starting the Application
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To start the application in production mode, run:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```sh
+npm start
+```
 
-## Deploy on Vercel
+### Linting and Formatting
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+To lint the code, run:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```sh
+npm run lint
+```
+
+To format the code with Prettier, run:
+
+```sh
+npm run format
+```
+
+### Seeding and migration 
+to run seed script alone, run: 
+
+```sh
+ts-node src/database/seed.ts
+```
+
+## Dependencies
+
+- `@emotion/react`: ^11.11.4
+- `@emotion/styled`: ^11.11.5
+- `@mui/material`: ^5.15.20
+- `next`: 14.2.4
+- `react`: ^18
+- `react-dom`: ^18
+- `sqlite`: ^5.1.1
+- `sqlite3`: ^5.1.7
+- `swr`: ^2.2.5
+
+## DevDependencies
+
+- `@types/node`: ^20
+- `@types/react`: ^18
+- `@types/react-dom`: ^18
+- `eslint`: ^8
+- `eslint-config-next`: 14.2.4
+- `prettier`: ^3.3.2
+- `typescript`: ^5
+

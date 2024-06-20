@@ -1,15 +1,9 @@
 import * as React from 'react';
-import { Box, Container, Typography } from '@mui/material';
+import { Box, Container, Typography, useTheme } from '@mui/material';
 import useFetch from '../hooks/useFetch';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
-const PatientDataView = () => {
-  const { data, isLoading, isError } = useFetch('/api/patients');
-
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error loading data</div>;
-
-  const generateGridColDef = (): GridColDef[] => {
+const generateGridColDef = (): GridColDef[] => {
     return [
       { field: 'id', headerName: 'ID', width: 70 },
       {
@@ -45,15 +39,32 @@ const PatientDataView = () => {
   };
   
 
+const PatientDataView = () => {
+  const { data, isLoading, isError } = useFetch('/api/patients');
+  const theme = useTheme();
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error loading data</div>;
+
+
   return (
     <Container sx={{padding: '50px'}}>
-      <Typography variant="h4">Patient Data</Typography>
+      <Typography variant="h4" sx={{ padding: '20px'}}>Patient Data</Typography>
       <Box sx={{ height: 400, width: '100%' }}>
       <DataGrid 
+      sx={{
+        backgroundColor: theme.palette.common.white,
+        '& .MuiDataGrid-columnHeader': {
+          backgroundColor: theme.palette.common.white,
+        },
+        '& .MuiDataGrid-footerContainer': {
+          backgroundColor: theme.palette.secondary.main,
+          color: theme.palette.common.white,
+        },
+      }}
         columns={generateGridColDef()}
         rows={data}
       />
-
       </Box>
     </Container>
   );

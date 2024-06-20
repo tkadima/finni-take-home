@@ -7,11 +7,14 @@ import path from 'path';
   // Open a database connection
   const db = await open({
     filename: './database.sqlite',
-    driver: sqlite3.Database
+    driver: sqlite3.Database,
   });
 
   // Read the SQL seed file
-  const seedSQL = fs.readFileSync(path.join(__dirname, 'migrations/0002_seed_patients.sql'), 'utf-8');
+  const seedSQL = fs.readFileSync(
+    path.join(__dirname, 'migrations/0002_seed_patients.sql'),
+    'utf-8'
+  );
 
   // Execute the SQL seed commands
   await db.exec(seedSQL);

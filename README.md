@@ -1,4 +1,3 @@
-
 # Finni Take Home Project
 
 ## Project Setup
@@ -66,8 +65,9 @@ To format the code with Prettier, run:
 npm run format
 ```
 
-### Seeding and migration 
-to run seed script alone, run: 
+### Seeding and migration
+
+to run seed script alone, run:
 
 ```sh
 ts-node src/database/seed.ts
@@ -94,4 +94,3 @@ ts-node src/database/seed.ts
 - `eslint-config-next`: 14.2.4
 - `prettier`: ^3.3.2
 - `typescript`: ^5
-

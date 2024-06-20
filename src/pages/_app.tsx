@@ -2,7 +2,6 @@ import * as React from 'react';
 import { AppProps } from 'next/app';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { useEffect } from 'react';
 import '../styles/globals.css';
 import AppNavBar from '@/app/components/navbar';
 

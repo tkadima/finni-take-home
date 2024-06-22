@@ -22,7 +22,7 @@ const theme = createTheme({
     h4: {
       fontFamily: 'Recklessneue, sans-serif',
     },
-    h6: {
+    h5: {
       fontFamily: 'Recklessneue, sans-serif',
     },
   },

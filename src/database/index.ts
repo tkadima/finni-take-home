@@ -10,10 +10,6 @@ const dbPromise = open({
 export const getDb = async () => {
   try {
     const db = await dbPromise;
-    // await db.migrate({
-    //   migrationsPath: path.join(process.cwd(), 'src', 'database', 'migrations'),
-    //   force: true,
-    // });
     return db;
   } catch (error) {
     console.error('Failed to open the database:', error);

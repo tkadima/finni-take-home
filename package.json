@@ -7,22 +7,27 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "seed": "ts-node src/database/seed.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@faker-js/faker": "^8.4.1",
     "@mui/material": "^5.15.20",
     "@mui/x-data-grid": "^7.7.0",
     "@next/font": "^14.2.4",
+    "faker": "^5.5.3",
     "next": "14.2.4",
     "react": "^18",
     "react-dom": "^18",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7",
-    "swr": "^2.2.5"
+    "swr": "^2.2.5",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
+    "@types/faker": "^6.6.9",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

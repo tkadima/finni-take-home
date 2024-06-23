@@ -39,7 +39,13 @@ async function seedDatabase() {
       .split('T')[0];
     const status = statuses[Math.floor(Math.random() * statuses.length)];
     const addresses = JSON.stringify([
-      { type: 'home', address: faker.location.streetAddress() },
+      {
+        addressLine1: faker.location.streetAddress(),
+        addressLine2: faker.location.buildingNumber(),
+        city: faker.location.city(),
+        state: faker.location.state(),
+        zipcode: faker.location.zipCode(),
+      },
     ]);
     const additionalFields = JSON.stringify([
       { field_name: 'Preferred Language', field_value: 'English' },

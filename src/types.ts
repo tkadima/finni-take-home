@@ -1,6 +1,9 @@
 interface Address {
-  type: string;
-  address: string;
+  addressLine1: string;
+  addressLine2: string; 
+  city: string; 
+  state: string;
+  zipcode: string;
 }
 
 interface AdditionalField {
@@ -8,7 +11,7 @@ interface AdditionalField {
   field_value: string;
 }
 
-interface UserData {
+interface PatientData {
   id: number;
   first_name: string;
   middle_name: string;

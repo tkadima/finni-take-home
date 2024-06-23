@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Container, Link, Typography, useTheme } from '@mui/material';
+import { Box, Button, Container, Link, Typography, useTheme } from '@mui/material';
 import useFetch from '../hooks/useFetch';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import NewPatientModal from '../app/components/NewPatientModal';
@@ -61,12 +61,12 @@ const PatientDataView = () => {
         isOpen={modalOpen}
         onCloseModal={() => setModalOpen(false)}
       />
-      <Typography variant="h4" sx={{ padding: '20px' }}>
+      <Typography variant="h4" sx={{ paddingBottom: '20px' }}>
         Patient Data
       </Typography>
-      <Link variant="h6" onClick={handleOpenNewPatientModal}>
-        ADD NEW PATIENT
-      </Link>
+      <Button onClick={handleOpenNewPatientModal}>
+        Add a new Patient
+      </Button>
       <Box sx={{ height: 400, width: '100%' }}>
         <DataGrid
           sx={{

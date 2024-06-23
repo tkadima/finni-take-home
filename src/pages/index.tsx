@@ -45,11 +45,11 @@ const generateGridColDef = (): GridColDef[] => {
 
 const PatientDataView = () => {
   const { data, isLoading, isError } = useFetch('/api/patients');
-  const [modalOpen, setModalOpen] = useState<boolean>(false) ;
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
   const theme = useTheme();
 
   const handleOpenNewPatientModal = () => {
-    setModalOpen(true); 
+    setModalOpen(true);
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -57,7 +57,10 @@ const PatientDataView = () => {
 
   return (
     <Container sx={{ padding: '50px' }}>
-      <NewPatientModal isOpen={modalOpen} onCloseModal={() => setModalOpen(false)}/>
+      <NewPatientModal
+        isOpen={modalOpen}
+        onCloseModal={() => setModalOpen(false)}
+      />
       <Typography variant="h4" sx={{ padding: '20px' }}>
         Patient Data
       </Typography>

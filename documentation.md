@@ -36,5 +36,3 @@ CREATE TABLE IF NOT EXISTS patients (
 I displayed the data using a MUI DataGrid. The columns are populated based on the specified fields. The first, middle, and last names are aggregated into one column, and additional fields are grouped into a separate column. Then, I customized the theme of the grid using the logo, fonts, and colors from FiniHealth.com.
 ![DataGrid](public/datagrid-plain.png)
 ![DataGrid](public/datagrid-customized.png)
-
-

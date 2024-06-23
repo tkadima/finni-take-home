@@ -8,10 +8,10 @@ import AppNavBar from '@/app/components/navbar';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#FFF',
+      main: '#ED762F',
     },
     secondary: {
-      main: '#ED762F',
+      main: '#FFF',
     },
     background: {
       default: '#FBF7F0',

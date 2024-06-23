@@ -1,7 +1,8 @@
-import * as React from 'react';
-import { Box, Container, Typography, useTheme } from '@mui/material';
+import { useState } from 'react';
+import { Box, Container, Link, Typography, useTheme } from '@mui/material';
 import useFetch from '../hooks/useFetch';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import NewPatientModal from '../app/components/NewPatientModal';
 
 const generateGridColDef = (): GridColDef[] => {
   return [
@@ -44,16 +45,25 @@ const generateGridColDef = (): GridColDef[] => {
 
 const PatientDataView = () => {
   const { data, isLoading, isError } = useFetch('/api/patients');
+  const [modalOpen, setModalOpen] = useState<boolean>(false) ;
   const theme = useTheme();
+
+  const handleOpenNewPatientModal = () => {
+    setModalOpen(true); 
+  };
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error loading data</div>;
 
   return (
     <Container sx={{ padding: '50px' }}>
+      <NewPatientModal isOpen={modalOpen} onCloseModal={() => setModalOpen(false)}/>
       <Typography variant="h4" sx={{ padding: '20px' }}>
         Patient Data
       </Typography>
+      <Link variant="h6" onClick={handleOpenNewPatientModal}>
+        ADD NEW PATIENT
+      </Link>
       <Box sx={{ height: 400, width: '100%' }}>
         <DataGrid
           sx={{
@@ -62,7 +72,7 @@ const PatientDataView = () => {
               backgroundColor: theme.palette.common.white,
             },
             '& .MuiDataGrid-footerContainer': {
-              backgroundColor: theme.palette.secondary.main,
+              backgroundColor: theme.palette.primary.main,
               color: theme.palette.common.white,
             },
           }}

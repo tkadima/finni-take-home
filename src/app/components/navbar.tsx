@@ -9,7 +9,7 @@ import {
 
 export default function AppNavBar() {
   return (
-    <AppBar position="static">
+    <AppBar position="static" style={{ backgroundColor: '#FFF' }}>
       <Toolbar>
         <Box sx={{ flexGrow: 1 }}>
           <IconButton edge="start" color="inherit" aria-label="logo" href="/">

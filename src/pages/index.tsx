@@ -40,9 +40,9 @@ const generateGridColDef = (
       headerName: 'Additional Fields',
       width: 300,
       renderCell: (params) => {
-        const additionalFields: AdditionalField[] = JSON.parse(params.value);
-        return additionalFields
-          .map((field) => `${field.field_name}: ${field.field_value}`)
+        const additionalFields = JSON.parse(params.value);
+        return Object.keys(additionalFields)
+          .map((key: string) => `${key}: ${additionalFields[key]}`)
           .join(', ');
       },
     },

@@ -12,6 +12,16 @@ import {
 } from '@mui/material';
 import { Add as AddIcon, Remove as RemoveIcon } from '@mui/icons-material';
 
+interface FormData { 
+  firstName: string,
+  middleName: string,
+  lastName: string,
+  dob: string,
+  status: string,
+  addresses: Address[]; 
+  fields: {[key: string]: string} 
+}
+
 type NewPatientModalPropTypes = {
   isOpen: boolean;
   onCloseModal: (value: boolean) => void;
@@ -24,23 +34,25 @@ const PatientModal = ({
   patient,
 }: NewPatientModalPropTypes) => {
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     firstName: '',
     middleName: '',
     lastName: '',
     dob: '',
     status: '',
-    addresses: [{ line1: '', line2: '', city: '', state: '', zipcode: '' }],
-    fields: [],
+    addresses: [{ addressLine1: '', addressLine2: '', city: '', state: '', zipcode: '' }],
+    fields: {},
   });
 
   const [tabIndex, setTabIndex] = useState(0);
-
   useEffect(() => {
     if (patient) {
       const patientAddress = JSON.parse(patient.addresses)
-        .map((patientAddress: Address) =>  ({line1: patientAddress.addressLine1, line2: patientAddress.addressLine2, city: patientAddress.city,
+        .map((patientAddress: Address) =>  ({addressLine1: patientAddress.addressLine1, addressLine2: patientAddress.addressLine2, city: patientAddress.city,
         state: patientAddress.state,  zipcode: patientAddress.zipcode})); 
+
+      const patientAdditionalFields = JSON.parse(patient.additional_fields);
+
       setFormData({
         firstName: patient.first_name || '',
         middleName: patient.middle_name || '',
@@ -48,12 +60,14 @@ const PatientModal = ({
         dob: patient.date_of_birth || '',
         status: patient.status || '',
         addresses:  patientAddress || [
-          { line1: '', line2: '', city: '', state: '', zipcode: '' },
+          { addressLine1: '', addressLine2: '', city: '', state: '', zipcode: '' },
         ],
-        fields: JSON.parse(patient.additional_fields) || [],
+        fields: patientAdditionalFields || {},
       });
     }
   }, [patient]);
+
+
 
   const handleTabChange = (_event: any, newIndex: number) => {
     setTabIndex(newIndex);
@@ -61,7 +75,7 @@ const PatientModal = ({
 
 
   const handleAddAddress = () => {
-    const newAddresses =  [...formData.addresses, { line1: '', line2: '', city: '', state: '', zipcode: '' }]; 
+    const newAddresses =  [...formData.addresses, { addressLine1: '', addressLine2: '', city: '', state: '', zipcode: '' }]; 
     setFormData({...formData, addresses: newAddresses}); 
   };
 
@@ -71,36 +85,91 @@ const PatientModal = ({
   };
 
 
-  const handleChange = (e: { target: { name: any; value: any } }) => {
+  // const handleChange = (e: { target: { name: any; value: any } }) => {
+  //   const { name, value } = e.target;
+  //   if (name.startsWith('address')) { 
+  //     const [, field, index] = name.split('-'); 
+  //     const idx = parseInt(index, 10);
+  //     setFormData((prevData) => ({
+  //       ...prevData, 
+  //       addresses: prevData.addresses.map((address, i) => i === idx ? {...address, [field]: value}: address) 
+  //     }))
+  //   }
+  //   else if (name.startsWith('configurableField')) { 
+  //     const [, field, index] = name.split('-'); 
+  //     const idx = parseInt(index, 10);
+  //     const key = Object.keys(formData.fields)[idx]; 
+  //     const updatedFormData = {...formData.fields};
+  //     if (field === 'value') {
+  //       updatedFormData[key] = value; 
+  //     }
+  //     else { 
+  //       const configurableValue = formData.fields[key]; 
+  //       delete updatedFormData[key]; 
+  //       updatedFormData[value] = configurableValue; 
+  //     }
+  //     setFormData({...formData, fields: updatedFormData}); 
+  //   }
+  //   else { setFormData((prevData) => ({
+  //     ...prevData,
+  //     [name]: value,
+  //   }));
+  // }
+  // };
+
+  const handleChange = (e: { target: { name: string; value: string } }) => {
     const { name, value } = e.target;
-    if (name.startsWith('address')) { 
-      const [, field, index] = name.split('-'); 
-      const idx = parseInt(index, 10);
+  
+    const handleAddressChange = (field: string, index: number) => {
       setFormData((prevData) => ({
-        ...prevData, 
-        addresses: prevData.addresses.map((address, i) => i === idx ? {...address, [field]: value}: address) 
-      }))
+        ...prevData,
+        addresses: prevData.addresses.map((address, i) =>
+          i === index ? { ...address, [field]: value } : address
+        ),
+      }));
+    };
+  
+    const handleConfigurableFieldChange = (field: string, index: number) => {
+      const key = Object.keys(formData.fields)[index];
+      const updatedFields = { ...formData.fields };
+  
+      if (field === 'value') {
+        updatedFields[key] = value;
+      } else {
+        const configurableValue = formData.fields[key];
+        delete updatedFields[key];
+        updatedFields[value] = configurableValue;
+      }
+  
+      setFormData((prevData) => ({
+        ...prevData,
+        fields: updatedFields,
+      }));
+    };
+  
+    if (name.startsWith('address')) {
+      const [, field, indexStr] = name.split('-');
+      const index = parseInt(indexStr, 10);
+      handleAddressChange(field, index);
+    } else if (name.startsWith('configurableField')) {
+      const [, field, indexStr] = name.split('-');
+      const index = parseInt(indexStr, 10);
+      handleConfigurableFieldChange(field, index);
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
     }
-    else { setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  }
   };
+  
+
+  
 
   // TODO: handle configurable fields, abstract it
-    // const handleAddNewField = () => {
-  //   setFields([...fields, { type: '', fieldName: '', fieldValue: '' }]);
-  // };
-
-  // const handleFieldChange = (index: number, field: string, value: string) => {
-  //   // fix so it's more readable
-  //   const newFields = fields.map((newField: any, i: number) =>
-  //     i === index ? { ...newField, [field]: value } : field
-  //   );
-
-  //   setFields(newFields);
-  // };
+  const handleAddNewConfigurableField = () => {
+    setFormData({...formData, fields: {...formData.fields, ['']: ''}}); 
+  };
 
   const handleSubmit = () => {
     // Handle form submission
@@ -144,6 +213,7 @@ const PatientModal = ({
             />
             <TextField
               label="Middle Name"
+              name="middleName"
               value={formData.middleName}
               onChange={handleChange}
               fullWidth
@@ -151,6 +221,7 @@ const PatientModal = ({
             />
             <TextField
               label="Last Name"
+              name="lastName"
               value={formData.lastName}
               onChange={handleChange}
               fullWidth
@@ -160,6 +231,7 @@ const PatientModal = ({
             <TextField
               label="Date of Birth"
               type="date"
+              name="dob"
               value={formData.dob}
               onChange={handleChange}
               fullWidth
@@ -171,6 +243,7 @@ const PatientModal = ({
             />
             <TextField
               label="Status"
+              name="status"
               value={formData.status}
               onChange={handleChange}
               select
@@ -195,8 +268,8 @@ const PatientModal = ({
               >
                 <TextField
                   label="Street Name Line 1"
-                  name={`address-line1-${index}`}
-                  value={address.line1}
+                  name={`address-addressLine1-${index}`}
+                  value={address.addressLine1}
                   fullWidth
                   required
                   onChange={handleChange}
@@ -204,8 +277,8 @@ const PatientModal = ({
                 />
                 <TextField
                   label="Street Name Line 2"
-                  name={`address-line2-${index}`}
-                  value={address.line2}
+                  name={`address-addressLine2-${index}`}
+                  value={address.addressLine2}
                   fullWidth
                   onChange={handleChange}
                   margin="normal"
@@ -248,6 +321,39 @@ const PatientModal = ({
             <Button onClick={handleAddAddress} startIcon={<AddIcon />} sx={{ mt: 2 }}>
               Add Address
             </Button>
+          </Box>
+        )}
+        {tabIndex === 2 && (
+          <Box>
+            <Button
+              startIcon={<AddIcon />}
+              onClick={handleAddNewConfigurableField}
+              sx={{ mt: 2 }}
+            >
+              Add New Field
+            </Button>
+            {formData.fields && Object.keys(formData.fields).map((field: string, index: number) => (
+              <Box sx={{ display: 'flex', gap: 2 }}>
+                <TextField
+                  label="Name"
+                  name={`configurableField-name-${index}`}
+                  value={field}
+                  onChange={handleChange}
+                  margin="normal"
+                />
+                <TextField
+                  label="Value"
+                  name={`configurableField-value-${index}`}
+                  value={formData.fields[field]}
+                  onChange={handleChange}
+                  margin="normal"
+                />
+
+                <IconButton onClick={() => handleRemoveAddress(index)}>
+                  <RemoveIcon />
+                </IconButton>
+              </Box>
+            ))}
           </Box>
         )}
 

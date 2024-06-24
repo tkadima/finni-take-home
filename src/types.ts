@@ -7,8 +7,8 @@ interface Address {
 }
 
 interface AdditionalField {
-  field_name: string;
-  field_value: string;
+  fieldName: string;
+  fieldValue: string;
 }
 
 interface PatientData {

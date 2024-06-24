@@ -27,7 +27,7 @@ type PatientModalPropTypes = {
   onCloseModal: () => void;
   patient: PatientData | null;
   onCreateNewPatient: (formData: FormData) => void;
-  onEditPatient: (formData: Partial<FormData>) => void; 
+  onEditPatient: (formData: FormData) => void;
 };
 
 const PatientModal = ({
@@ -179,8 +179,8 @@ const PatientModal = ({
 
   const handleSubmit = () => {
     if (patient) onEditPatient(formData);
-    else onCreateNewPatient(formData); 
-  }
+    else onCreateNewPatient(formData);
+  };
 
   useEffect(() => {
     validateForm();

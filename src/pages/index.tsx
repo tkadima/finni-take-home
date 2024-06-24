@@ -116,14 +116,17 @@ const PatientDataView = () => {
   const handleEditPatient = async (payload: any) => {
     try {
       if (selectedPatient) {
-        const updated = await put(`/api/patients/${selectedPatient.id}`, payload);
+        const updated = await put(
+          `/api/patients/${selectedPatient.id}`,
+          payload
+        );
         console.log('updated result', updated);
       }
       setPatientModalIsOpen(false);
     } catch (error) {
       console.log('Error updating patient');
     }
-  }
+  };
 
   const handleDeletePatient = async () => {
     try {

@@ -12,14 +12,14 @@ import {
 } from '@mui/material';
 import { Add as AddIcon, Remove as RemoveIcon } from '@mui/icons-material';
 
-interface FormData { 
-  firstName: string,
-  middleName: string,
-  lastName: string,
-  dob: string,
-  status: string,
-  addresses: Address[]; 
-  fields: {[key: string]: string} 
+interface FormData {
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  dob: string;
+  status: string;
+  addresses: Address[];
+  fields: { [key: string]: string };
 }
 
 type NewPatientModalPropTypes = {
@@ -33,23 +33,30 @@ const PatientModal = ({
   onCloseModal,
   patient,
 }: NewPatientModalPropTypes) => {
-
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
     middleName: '',
     lastName: '',
     dob: '',
     status: '',
-    addresses: [{ addressLine1: '', addressLine2: '', city: '', state: '', zipcode: '' }],
+    addresses: [
+      { addressLine1: '', addressLine2: '', city: '', state: '', zipcode: '' },
+    ],
     fields: {},
   });
 
   const [tabIndex, setTabIndex] = useState(0);
   useEffect(() => {
     if (patient) {
-      const patientAddress = JSON.parse(patient.addresses)
-        .map((patientAddress: Address) =>  ({addressLine1: patientAddress.addressLine1, addressLine2: patientAddress.addressLine2, city: patientAddress.city,
-        state: patientAddress.state,  zipcode: patientAddress.zipcode})); 
+      const patientAddress = JSON.parse(patient.addresses).map(
+        (patientAddress: Address) => ({
+          addressLine1: patientAddress.addressLine1,
+          addressLine2: patientAddress.addressLine2,
+          city: patientAddress.city,
+          state: patientAddress.state,
+          zipcode: patientAddress.zipcode,
+        })
+      );
 
       const patientAdditionalFields = JSON.parse(patient.additional_fields);
 
@@ -59,67 +66,40 @@ const PatientModal = ({
         lastName: patient.middle_name || '',
         dob: patient.date_of_birth || '',
         status: patient.status || '',
-        addresses:  patientAddress || [
-          { addressLine1: '', addressLine2: '', city: '', state: '', zipcode: '' },
+        addresses: patientAddress || [
+          {
+            addressLine1: '',
+            addressLine2: '',
+            city: '',
+            state: '',
+            zipcode: '',
+          },
         ],
         fields: patientAdditionalFields || {},
       });
     }
   }, [patient]);
 
-
-
   const handleTabChange = (_event: any, newIndex: number) => {
     setTabIndex(newIndex);
   };
 
-
   const handleAddAddress = () => {
-    const newAddresses =  [...formData.addresses, { addressLine1: '', addressLine2: '', city: '', state: '', zipcode: '' }]; 
-    setFormData({...formData, addresses: newAddresses}); 
+    const newAddresses = [
+      ...formData.addresses,
+      { addressLine1: '', addressLine2: '', city: '', state: '', zipcode: '' },
+    ];
+    setFormData({ ...formData, addresses: newAddresses });
   };
 
   const handleRemoveAddress = (index: number) => {
     const newAddresses = formData.addresses.filter((_, i) => i !== index);
-    setFormData({...formData, addresses: newAddresses}); 
+    setFormData({ ...formData, addresses: newAddresses });
   };
-
-
-  // const handleChange = (e: { target: { name: any; value: any } }) => {
-  //   const { name, value } = e.target;
-  //   if (name.startsWith('address')) { 
-  //     const [, field, index] = name.split('-'); 
-  //     const idx = parseInt(index, 10);
-  //     setFormData((prevData) => ({
-  //       ...prevData, 
-  //       addresses: prevData.addresses.map((address, i) => i === idx ? {...address, [field]: value}: address) 
-  //     }))
-  //   }
-  //   else if (name.startsWith('configurableField')) { 
-  //     const [, field, index] = name.split('-'); 
-  //     const idx = parseInt(index, 10);
-  //     const key = Object.keys(formData.fields)[idx]; 
-  //     const updatedFormData = {...formData.fields};
-  //     if (field === 'value') {
-  //       updatedFormData[key] = value; 
-  //     }
-  //     else { 
-  //       const configurableValue = formData.fields[key]; 
-  //       delete updatedFormData[key]; 
-  //       updatedFormData[value] = configurableValue; 
-  //     }
-  //     setFormData({...formData, fields: updatedFormData}); 
-  //   }
-  //   else { setFormData((prevData) => ({
-  //     ...prevData,
-  //     [name]: value,
-  //   }));
-  // }
-  // };
 
   const handleChange = (e: { target: { name: string; value: string } }) => {
     const { name, value } = e.target;
-  
+
     const handleAddressChange = (field: string, index: number) => {
       setFormData((prevData) => ({
         ...prevData,
@@ -128,11 +108,11 @@ const PatientModal = ({
         ),
       }));
     };
-  
+
     const handleConfigurableFieldChange = (field: string, index: number) => {
       const key = Object.keys(formData.fields)[index];
       const updatedFields = { ...formData.fields };
-  
+
       if (field === 'value') {
         updatedFields[key] = value;
       } else {
@@ -140,13 +120,13 @@ const PatientModal = ({
         delete updatedFields[key];
         updatedFields[value] = configurableValue;
       }
-  
+
       setFormData((prevData) => ({
         ...prevData,
         fields: updatedFields,
       }));
     };
-  
+
     if (name.startsWith('address')) {
       const [, field, indexStr] = name.split('-');
       const index = parseInt(indexStr, 10);
@@ -162,13 +142,10 @@ const PatientModal = ({
       }));
     }
   };
-  
-
-  
 
   // TODO: handle configurable fields, abstract it
   const handleAddNewConfigurableField = () => {
-    setFormData({...formData, fields: {...formData.fields, ['']: ''}}); 
+    setFormData({ ...formData, fields: { ...formData.fields, ['']: '' } });
   };
 
   const handleSubmit = () => {
@@ -318,7 +295,11 @@ const PatientModal = ({
                 )}
               </Box>
             ))}
-            <Button onClick={handleAddAddress} startIcon={<AddIcon />} sx={{ mt: 2 }}>
+            <Button
+              onClick={handleAddAddress}
+              startIcon={<AddIcon />}
+              sx={{ mt: 2 }}
+            >
               Add Address
             </Button>
           </Box>
@@ -332,28 +313,31 @@ const PatientModal = ({
             >
               Add New Field
             </Button>
-            {formData.fields && Object.keys(formData.fields).map((field: string, index: number) => (
-              <Box sx={{ display: 'flex', gap: 2 }}>
-                <TextField
-                  label="Name"
-                  name={`configurableField-name-${index}`}
-                  value={field}
-                  onChange={handleChange}
-                  margin="normal"
-                />
-                <TextField
-                  label="Value"
-                  name={`configurableField-value-${index}`}
-                  value={formData.fields[field]}
-                  onChange={handleChange}
-                  margin="normal"
-                />
+            {formData.fields &&
+              Object.keys(formData.fields).map(
+                (field: string, index: number) => (
+                  <Box sx={{ display: 'flex', gap: 2 }}>
+                    <TextField
+                      label="Name"
+                      name={`configurableField-name-${index}`}
+                      value={field}
+                      onChange={handleChange}
+                      margin="normal"
+                    />
+                    <TextField
+                      label="Value"
+                      name={`configurableField-value-${index}`}
+                      value={formData.fields[field]}
+                      onChange={handleChange}
+                      margin="normal"
+                    />
 
-                <IconButton onClick={() => handleRemoveAddress(index)}>
-                  <RemoveIcon />
-                </IconButton>
-              </Box>
-            ))}
+                    <IconButton onClick={() => handleRemoveAddress(index)}>
+                      <RemoveIcon />
+                    </IconButton>
+                  </Box>
+                )
+              )}
           </Box>
         )}
 

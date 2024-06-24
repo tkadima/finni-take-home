@@ -47,9 +47,9 @@ async function seedDatabase() {
         zipcode: faker.location.zipCode(),
       },
     ]);
-    const additionalFields = JSON.stringify(
-      { 'Preferred Language' : 'English' },
-    );
+    const additionalFields = JSON.stringify({
+      'Preferred Language': 'English',
+    });
 
     await stmt.run(
       firstName,

@@ -30,9 +30,7 @@ const generateGridColDef = (
       width: 300,
       renderCell: (params) => {
         const addresses: Address[] = JSON.parse(params.value);
-        return addresses
-          .map((address) => `${address.addressLine1}`)
-          .join(', ');
+        return addresses.map((address) => `${address.addressLine1}`).join(', ');
       },
     },
     {

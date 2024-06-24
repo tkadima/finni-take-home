@@ -143,10 +143,18 @@ const PatientModal = ({
     }
   };
 
-  // TODO: handle configurable fields, abstract it
   const handleAddNewConfigurableField = () => {
     setFormData({ ...formData, fields: { ...formData.fields, ['']: '' } });
   };
+
+  const handleDeleteConfigurableField = (index: number) => {
+    const key = Object.keys(formData.fields)[index];
+    const updatedFields = { ...formData.fields };
+    delete updatedFields[key]; 
+
+    setFormData({...formData, fields: updatedFields}); 
+
+  }
 
   const handleSubmit = () => {
     // Handle form submission
@@ -332,7 +340,7 @@ const PatientModal = ({
                       margin="normal"
                     />
 
-                    <IconButton onClick={() => handleRemoveAddress(index)}>
+                    <IconButton onClick={() => handleDeleteConfigurableField(index)}>
                       <RemoveIcon />
                     </IconButton>
                   </Box>

@@ -24,14 +24,16 @@ interface FormData {
 
 type PatientModalPropTypes = {
   isOpen: boolean;
-  onCloseModal: (value: boolean) => void;
+  onCloseModal: () => void;
   patient: PatientData | null;
+  onCreateNewPatient: (formData: FormData) => void;
 };
 
 const PatientModal = ({
   isOpen,
   onCloseModal,
   patient,
+  onCreateNewPatient,
 }: PatientModalPropTypes) => {
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
@@ -44,8 +46,9 @@ const PatientModal = ({
     ],
     fields: {},
   });
+  const [tabIndex, setTabIndex] = useState<number>(0);
+  const [isValidForm, setIsValidForm] = useState<boolean>(false);
 
-  const [tabIndex, setTabIndex] = useState(0);
   useEffect(() => {
     if (patient) {
       const patientAddress = JSON.parse(patient.addresses).map(
@@ -155,9 +158,26 @@ const PatientModal = ({
     setFormData({ ...formData, fields: updatedFields });
   };
 
-  const handleSubmit = () => {
-    // Handle form submission
+  const validateForm = () => {
+    const { firstName, lastName, dob, status, addresses } = formData;
+    const isFormValid =
+      firstName.trim() !== '' &&
+      lastName.trim() !== '' &&
+      dob.trim() !== '' &&
+      status.trim() !== '' &&
+      addresses.every(
+        (address) =>
+          address.addressLine1.trim() !== '' &&
+          address.city.trim() !== '' &&
+          address.state.trim() !== '' &&
+          address.zipcode.trim() !== ''
+      );
+    setIsValidForm(isFormValid);
   };
+
+  useEffect(() => {
+    validateForm();
+  }, [formData]);
 
   return (
     <Modal open={isOpen} onClose={onCloseModal}>
@@ -350,14 +370,17 @@ const PatientModal = ({
           </Box>
         )}
 
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleSubmit}
-          sx={{ mt: 2 }}
-        >
-          Submit
-        </Button>
+        {tabIndex === 2 && (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => onCreateNewPatient(formData)}
+            sx={{ mt: 2 }}
+            disabled={!isValidForm}
+          >
+            Submit
+          </Button>
+        )}
       </Box>
     </Modal>
   );

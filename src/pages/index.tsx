@@ -87,6 +87,7 @@ const PatientDataView = () => {
   const theme = useTheme();
 
   const handleOpenNewPatientModal = () => {
+    setSelectedPatient(null);
     setPatientModalIsOpen(true);
   };
 
@@ -102,8 +103,18 @@ const PatientDataView = () => {
     setWarningDialogIsOpen(true);
   };
 
+  const handleCreatePatient = async (payload: any) => {
+    try {
+      console.log('my payload', payload);
+      const created = await post('/api/patients', payload);
+      console.log('creation result', created);
+      setPatientModalIsOpen(false);
+    } catch (error) {
+      console.log('Error creating patient');
+    }
+  };
+
   const handleDeletePatient = async () => {
-    // delete the selectedPatient by id
     try {
       if (selectedPatient) {
         const result = await del(`/api/patients/${selectedPatient.id}`);
@@ -111,7 +122,7 @@ const PatientDataView = () => {
         setWarningDialogIsOpen(false);
       }
     } catch (error) {
-      console.error('Error deleting data:', error);
+      console.error('Error deleting patient:', error);
     }
   };
 
@@ -124,6 +135,7 @@ const PatientDataView = () => {
         <PatientModal
           isOpen={patientModalIsOpen}
           onCloseModal={() => setPatientModalIsOpen(false)}
+          onCreateNewPatient={handleCreatePatient}
           patient={selectedPatient ?? null}
         />
       )}

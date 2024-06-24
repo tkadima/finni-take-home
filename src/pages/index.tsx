@@ -1,7 +1,12 @@
 import { useState } from 'react';
 import { Box, Button, Container, Typography, useTheme } from '@mui/material';
 import useFetch from '../hooks/useFetch';
-import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  GridActionsCellItem,
+  GridColDef,
+  GridToolbar,
+} from '@mui/x-data-grid';
 import PatientModal from '../app/components/PatientModal';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import EditIcon from '@mui/icons-material/Edit';
@@ -168,6 +173,14 @@ const PatientDataView = () => {
       <Button onClick={handleOpenNewPatientModal}>Add a new Patient</Button>
       <Box sx={{ height: 400, width: '100%' }}>
         <DataGrid
+          slots={{
+            toolbar: GridToolbar,
+          }}
+          slotProps={{
+            toolbar: {
+              showQuickFilter: true,
+            },
+          }}
           sx={{
             backgroundColor: theme.palette.common.white,
             '& .MuiDataGrid-columnHeader': {

@@ -48,17 +48,15 @@ export default async function handler(
     ]);
 
     // Respond with the updated data
-    res
-      .status(200)
-      .json({
-        id,
-        firstName,
-        middleName,
-        lastName,
-        dob,
-        status,
-        addresses,
-        fields,
-      });
+    res.status(200).json({
+      id,
+      firstName,
+      middleName,
+      lastName,
+      dob,
+      status,
+      addresses,
+      fields,
+    });
   }
 }

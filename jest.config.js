@@ -1,9 +1,5 @@
 module.exports = {
-    testEnvironment: 'node',
-    moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
-    transform: {
-      '^.+\\.(ts|tsx)$': 'ts-jest',
-    },
-    testMatch: ['**/?(*.)+(spec|test).[tj]s?(x)'],
-  };
-  
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  testPathIgnorePatterns: ['/node_modules/', '/.next/'],
+};

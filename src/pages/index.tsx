@@ -121,11 +121,7 @@ const PatientDataView = () => {
   const handleEditPatient = async (payload: any) => {
     try {
       if (selectedPatient) {
-        const updated = await put(
-          `/api/patients/${selectedPatient.id}`,
-          payload
-        );
-        console.log('updated result', updated);
+        await put(`/api/patients/${selectedPatient.id}`, payload);
       }
       setPatientModalIsOpen(false);
     } catch (error) {

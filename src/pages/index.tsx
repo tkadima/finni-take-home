@@ -5,6 +5,7 @@ import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
 import PatientModal from '../app/components/PatientModal';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteWarningDialog from '../app/components/DeleteWarningDialog';
 
 const generateGridColDef = (
   handleDeleteClick: (id: number) => void,
@@ -74,23 +75,27 @@ const generateGridColDef = (
 
 const PatientDataView = () => {
   const { data, isLoading, isError } = useFetch('/api/patients');
-  const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [editPatient, setEditPatient] = useState(null);
+  const [patientModalIsOpen, setPatientModalIsOpen] = useState<boolean>(false);
+  const [selectedPatient, setSelectedPatient] = useState(null);
+  const [warningDialogIsOpen, setWarningDialogIsOpen] =
+    useState<boolean>(false);
+
   const theme = useTheme();
 
   const handleOpenNewPatientModal = () => {
-    setModalOpen(true);
+    setPatientModalIsOpen(true);
   };
 
   const handleEditClick = (id: number) => {
-    setModalOpen(true);
-    // fetch patient with this id
     const patient = data.find((patient: PatientData) => patient.id === id);
-    setEditPatient(patient);
+    setSelectedPatient(patient);
+    setPatientModalIsOpen(true);
   };
 
   const handleDeleteClick = (id: number) => {
-    console.log('deleting', id);
+    const patient = data.find((patient: PatientData) => patient.id === id);
+    setSelectedPatient(patient);
+    setWarningDialogIsOpen(true);
     // delete the patient with this id
   };
 
@@ -99,11 +104,18 @@ const PatientDataView = () => {
 
   return (
     <Container sx={{ padding: '50px' }}>
-      {modalOpen && (
+      {patientModalIsOpen && (
         <PatientModal
-          isOpen={modalOpen}
-          onCloseModal={() => setModalOpen(false)}
-          patient={editPatient ?? null}
+          isOpen={patientModalIsOpen}
+          onCloseModal={() => setPatientModalIsOpen(false)}
+          patient={selectedPatient ?? null}
+        />
+      )}
+      {warningDialogIsOpen && selectedPatient && (
+        <DeleteWarningDialog
+          isOpen={warningDialogIsOpen}
+          onCloseModal={() => setWarningDialogIsOpen(false)}
+          patient={selectedPatient}
         />
       )}
       <Typography variant="h4" sx={{ paddingBottom: '20px' }}>

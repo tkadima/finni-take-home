@@ -22,11 +22,6 @@ const generateGridColDef = (
       field: 'full_name',
       headerName: 'Full Name',
       width: 200,
-      renderCell: (params) => {
-        const { first_name, middle_name, last_name } =
-          params.row as PatientData;
-        return `${last_name}, ${first_name} ${middle_name}`;
-      },
     },
     { field: 'date_of_birth', headerName: 'Date of Birth', width: 150 },
     { field: 'status', headerName: 'Status', width: 120 },
@@ -81,6 +76,11 @@ const generateGridColDef = (
 const PatientDataView = () => {
   const { data, isLoading, isError, post, put, del } =
     useFetch('/api/patients');
+
+  const rows = data?.map((patient: PatientData) => ({
+    ...patient, 
+    full_name: `${patient.last_name}, ${patient.first_name} ${patient.middle_name}`
+  }))
 
   const [patientModalIsOpen, setPatientModalIsOpen] = useState<boolean>(false);
   const [selectedPatient, setSelectedPatient] = useState<PatientData | null>(
@@ -188,7 +188,7 @@ const PatientDataView = () => {
             },
           }}
           columns={generateGridColDef(handleDeleteClick, handleEditClick)}
-          rows={data}
+          rows={rows}
         />
       </Box>
     </Container>

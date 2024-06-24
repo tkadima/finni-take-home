@@ -8,19 +8,17 @@ export default async function handler(
   const db = await getDb();
 
   if (req.method === 'GET') {
-    // Server side pagination
+    // Add Server side pagination? 
     const data = await db.all('SELECT * FROM patients');
     res.status(200).json(data);
   } else if (req.method === 'POST') {
     const { firstName, middleName, lastName, dob, status, addresses, fields } =
       req.body;
 
-    // Validate required fields
     if (!firstName || !lastName || !dob || !status) {
       return res.status(400).json({ message: 'Required fields are missing' });
     }
 
-    // Validate addresses
     if (!Array.isArray(addresses) || addresses.length === 0) {
       return res
         .status(400)
@@ -35,7 +33,6 @@ export default async function handler(
       }
     }
 
-    // Validate additional fields
     if (fields) {
       for (const key in fields) {
         if (!key) {
@@ -50,14 +47,12 @@ export default async function handler(
     const addressesJson = JSON.stringify(addresses);
     const fieldsJson = JSON.stringify(fields);
 
-    // SQL statement to insert data
     const sql = `
       INSERT INTO patients (
         first_name, middle_name, last_name, date_of_birth, status, addresses, additional_fields
       ) VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
 
-    // Insert data into the database
     try {
       const data = await db.run(sql, [
         firstName,

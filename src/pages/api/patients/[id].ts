@@ -18,8 +18,7 @@ export default async function handler(
         error: error.message,
       });
     }
-  }
-  else if (req.method === 'PUT') {
+  } else if (req.method === 'PUT') {
     const { id } = req.query;
     const { firstName, middleName, lastName, dob, status, addresses, fields } =
       req.body;
@@ -58,10 +57,8 @@ export default async function handler(
       addresses,
       fields,
     });
+  } else {
+    res.setHeader('Allow', ['PUT', 'DELETE']);
+    res.status(405).end(`Method ${req.method} Not Allowed`);
   }
- else {
-  res.setHeader('Allow', ['PUT', 'DELETE']);
-  res.status(405).end(`Method ${req.method} Not Allowed`);
-}
-  
 }

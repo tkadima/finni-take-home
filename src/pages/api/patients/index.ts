@@ -12,7 +12,8 @@ export default async function handler(
     const data = await db.all('SELECT * FROM patients');
     res.status(200).json(data);
   } else if (req.method === 'POST') {
-    const { firstName, middleName, lastName, dob, status, addresses, fields } = req.body;
+    const { firstName, middleName, lastName, dob, status, addresses, fields } =
+      req.body;
 
     // Validate required fields
     if (!firstName || !lastName || !dob || !status) {
@@ -21,12 +22,16 @@ export default async function handler(
 
     // Validate addresses
     if (!Array.isArray(addresses) || addresses.length === 0) {
-      return res.status(400).json({ message: 'At least one address is required' });
+      return res
+        .status(400)
+        .json({ message: 'At least one address is required' });
     }
 
     for (const address of addresses) {
       if (!address.street || !address.city || !address.state || !address.zip) {
-        return res.status(400).json({ message: 'Required address fields are missing' });
+        return res
+          .status(400)
+          .json({ message: 'Required address fields are missing' });
       }
     }
 
@@ -34,7 +39,9 @@ export default async function handler(
     if (fields) {
       for (const key in fields) {
         if (!key) {
-          return res.status(400).json({ message: 'Keys in additional_fields cannot be empty' });
+          return res
+            .status(400)
+            .json({ message: 'Keys in additional_fields cannot be empty' });
         }
       }
     }

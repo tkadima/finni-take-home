@@ -27,7 +27,9 @@ describe('/api/patients/[id]', () => {
 
     await handler(req, res);
 
-    expect(dbMock.all).toHaveBeenCalledWith('DELETE FROM patients WHERE id = 1');
+    expect(dbMock.all).toHaveBeenCalledWith(
+      'DELETE FROM patients WHERE id = 1'
+    );
     expect(status).toHaveBeenCalledWith(200);
     expect(json).toHaveBeenCalledWith({ message: 'Deleted patient with id 1' });
   });

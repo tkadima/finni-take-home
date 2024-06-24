@@ -22,7 +22,7 @@ interface FormData {
   fields: { [key: string]: string };
 }
 
-type NewPatientModalPropTypes = {
+type PatientModalPropTypes = {
   isOpen: boolean;
   onCloseModal: (value: boolean) => void;
   patient: PatientData | null;
@@ -32,7 +32,7 @@ const PatientModal = ({
   isOpen,
   onCloseModal,
   patient,
-}: NewPatientModalPropTypes) => {
+}: PatientModalPropTypes) => {
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
     middleName: '',
@@ -63,7 +63,7 @@ const PatientModal = ({
       setFormData({
         firstName: patient.first_name || '',
         middleName: patient.middle_name || '',
-        lastName: patient.middle_name || '',
+        lastName: patient.last_name || '',
         dob: patient.date_of_birth || '',
         status: patient.status || '',
         addresses: patientAddress || [
@@ -150,11 +150,10 @@ const PatientModal = ({
   const handleDeleteConfigurableField = (index: number) => {
     const key = Object.keys(formData.fields)[index];
     const updatedFields = { ...formData.fields };
-    delete updatedFields[key]; 
+    delete updatedFields[key];
 
-    setFormData({...formData, fields: updatedFields}); 
-
-  }
+    setFormData({ ...formData, fields: updatedFields });
+  };
 
   const handleSubmit = () => {
     // Handle form submission
@@ -340,7 +339,9 @@ const PatientModal = ({
                       margin="normal"
                     />
 
-                    <IconButton onClick={() => handleDeleteConfigurableField(index)}>
+                    <IconButton
+                      onClick={() => handleDeleteConfigurableField(index)}
+                    >
                       <RemoveIcon />
                     </IconButton>
                   </Box>

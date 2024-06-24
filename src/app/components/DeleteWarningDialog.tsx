@@ -11,12 +11,14 @@ type DeleteWarningDialogPropTypes = {
   isOpen: boolean;
   onCloseModal: () => void;
   patient: PatientData;
+  onConfirmDeletion: () => void;
 };
 
 const DeleteWarningDialog = ({
   isOpen,
   onCloseModal,
   patient,
+  onConfirmDeletion,
 }: DeleteWarningDialogPropTypes) => {
   return (
     <Dialog open={isOpen} onClose={onCloseModal}>
@@ -31,7 +33,9 @@ const DeleteWarningDialog = ({
       </DialogContent>
       <DialogActions>
         <Button onClick={onCloseModal}>Cancel</Button>
-        <Button autoFocus>Delete Patient</Button>
+        <Button onClick={onConfirmDeletion} autoFocus>
+          Delete Patient
+        </Button>
       </DialogActions>
     </Dialog>
   );

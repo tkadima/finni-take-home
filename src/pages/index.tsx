@@ -74,9 +74,13 @@ const generateGridColDef = (
 };
 
 const PatientDataView = () => {
-  const { data, isLoading, isError } = useFetch('/api/patients');
+  const { data, isLoading, isError, post, patch, del } =
+    useFetch('/api/patients');
+
   const [patientModalIsOpen, setPatientModalIsOpen] = useState<boolean>(false);
-  const [selectedPatient, setSelectedPatient] = useState(null);
+  const [selectedPatient, setSelectedPatient] = useState<PatientData | null>(
+    null
+  );
   const [warningDialogIsOpen, setWarningDialogIsOpen] =
     useState<boolean>(false);
 
@@ -96,7 +100,19 @@ const PatientDataView = () => {
     const patient = data.find((patient: PatientData) => patient.id === id);
     setSelectedPatient(patient);
     setWarningDialogIsOpen(true);
-    // delete the patient with this id
+  };
+
+  const handleDeletePatient = async () => {
+    // delete the selectedPatient by id
+    try {
+      if (selectedPatient) {
+        const result = await del(`/api/patients/${selectedPatient.id}`);
+        console.log('Delete result:', result);
+        setWarningDialogIsOpen(false);
+      }
+    } catch (error) {
+      console.error('Error deleting data:', error);
+    }
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -115,6 +131,7 @@ const PatientDataView = () => {
         <DeleteWarningDialog
           isOpen={warningDialogIsOpen}
           onCloseModal={() => setWarningDialogIsOpen(false)}
+          onConfirmDeletion={handleDeletePatient}
           patient={selectedPatient}
         />
       )}

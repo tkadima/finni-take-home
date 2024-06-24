@@ -19,7 +19,34 @@ export default async function handler(
       });
     }
   }
-  if (req.method === 'PATCH') {
-    console.log('doing a patch', req.body);
+  if (req.method === 'PUT') {
+    const { id } = req.query;
+    const { firstName, middleName, lastName, dob, status, addresses, fields } = req.body;
+  
+    // Convert addresses and fields to JSON strings
+    const addressesJson = JSON.stringify(addresses || []);
+    const fieldsJson = JSON.stringify(fields || {});
+  
+    // Construct the SQL statement
+    const sql = `
+      UPDATE patients
+      SET first_name = ?, middle_name = ?, last_name = ?, date_of_birth = ?, status = ?, addresses = ?, additional_fields = ?
+      WHERE id = ?
+    `;
+  
+    // Execute the SQL statement
+    const data = await db.run(sql, [
+      firstName || '',
+      middleName || '',
+      lastName || '',
+      dob || '',
+      status || 'Inquiry', // Default to 'Inquiry' if status is not provided
+      addressesJson,
+      fieldsJson,
+      id
+    ]);
+  
+    // Respond with the updated data
+    res.status(200).json({ id, firstName, middleName, lastName, dob, status, addresses, fields });
   }
 }

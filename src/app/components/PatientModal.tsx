@@ -27,6 +27,7 @@ type PatientModalPropTypes = {
   onCloseModal: () => void;
   patient: PatientData | null;
   onCreateNewPatient: (formData: FormData) => void;
+  onEditPatient: (formData: Partial<FormData>) => void; 
 };
 
 const PatientModal = ({
@@ -34,6 +35,7 @@ const PatientModal = ({
   onCloseModal,
   patient,
   onCreateNewPatient,
+  onEditPatient,
 }: PatientModalPropTypes) => {
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
@@ -174,6 +176,11 @@ const PatientModal = ({
       );
     setIsValidForm(isFormValid);
   };
+
+  const handleSubmit = () => {
+    if (patient) onEditPatient(formData);
+    else onCreateNewPatient(formData); 
+  }
 
   useEffect(() => {
     validateForm();
@@ -374,7 +381,7 @@ const PatientModal = ({
           <Button
             variant="contained"
             color="primary"
-            onClick={() => onCreateNewPatient(formData)}
+            onClick={handleSubmit}
             sx={{ mt: 2 }}
             disabled={!isValidForm}
           >

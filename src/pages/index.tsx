@@ -74,7 +74,7 @@ const generateGridColDef = (
 };
 
 const PatientDataView = () => {
-  const { data, isLoading, isError, post, patch, del } =
+  const { data, isLoading, isError, post, put, del } =
     useFetch('/api/patients');
 
   const [patientModalIsOpen, setPatientModalIsOpen] = useState<boolean>(false);
@@ -105,7 +105,6 @@ const PatientDataView = () => {
 
   const handleCreatePatient = async (payload: any) => {
     try {
-      console.log('my payload', payload);
       const created = await post('/api/patients', payload);
       console.log('creation result', created);
       setPatientModalIsOpen(false);
@@ -113,6 +112,18 @@ const PatientDataView = () => {
       console.log('Error creating patient');
     }
   };
+
+  const handleEditPatient = async (payload: any) => {
+    try {
+      if (selectedPatient) {
+        const updated = await put(`/api/patients/${selectedPatient.id}`, payload);
+        console.log('updated result', updated);
+      }
+      setPatientModalIsOpen(false);
+    } catch (error) {
+      console.log('Error updating patient');
+    }
+  }
 
   const handleDeletePatient = async () => {
     try {
@@ -137,6 +148,7 @@ const PatientDataView = () => {
           onCloseModal={() => setPatientModalIsOpen(false)}
           onCreateNewPatient={handleCreatePatient}
           patient={selectedPatient ?? null}
+          onEditPatient={handleEditPatient}
         />
       )}
       {warningDialogIsOpen && selectedPatient && (

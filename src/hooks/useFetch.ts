@@ -16,9 +16,9 @@ const useFetch = (url: string) => {
     }
   };
 
-  const patch = async (url: string, payload: any) => {
+  const put = async (url: string, payload: any) => {
     try {
-      const response = await axios.patch(url, payload);
+      const response = await axios.put(url, payload);
       mutate('/api/patients'); // Revalidate the data
       return response.data;
     } catch (err) {
@@ -41,7 +41,7 @@ const useFetch = (url: string) => {
     isLoading: !error && !data,
     isError: error,
     post,
-    patch,
+    put,
     del,
   };
 };

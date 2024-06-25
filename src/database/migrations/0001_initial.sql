@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS patients;
+
 CREATE TABLE IF NOT EXISTS patients (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   first_name TEXT NOT NULL,
@@ -6,5 +8,6 @@ CREATE TABLE IF NOT EXISTS patients (
   date_of_birth TEXT NOT NULL,
   status TEXT CHECK(status IN ('Inquiry', 'Onboarding', 'Active', 'Churned')) NOT NULL,
   addresses JSON,
+  phone_numbers JSON,
   additional_fields JSON
 );

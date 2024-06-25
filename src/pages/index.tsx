@@ -46,6 +46,15 @@ const generateGridColDef = (
           .join(', ');
       },
     },
+    {
+      field: 'phone_numbers', 
+      headerName: 'Phone Numbers', 
+      width: 200,
+      renderCell: (params) => {
+        const phoneNumbers: string[] = JSON.parse(params.value); 
+        return phoneNumbers.map(phone => phone).join(', ');
+      }
+    },
     ...configuredColumns,
     {
       field: 'actions',
@@ -80,6 +89,7 @@ const PatientDataView = () => {
     useFetch('/api/patients');
 
   const rows = data?.map((patient: PatientData) => {
+    console.log('patient', patient); 
     const additionalFields = JSON.parse(patient.additional_fields) || {};
     return {
       ...patient,

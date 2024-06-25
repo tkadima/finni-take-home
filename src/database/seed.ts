@@ -4,6 +4,24 @@ import fs from 'fs';
 import path from 'path';
 import { faker } from '@faker-js/faker';
 
+const getRandomAdditionalFields = (additionalFieldKeys: {[key: string]: string[]}) => {
+  const result: { [key: string]: string } = {};
+  const keys = Object.keys(additionalFieldKeys);
+  
+  // Randomly select 0 to all 3 keys
+  const numberOfKeysToSelect = Math.floor(Math.random() * (keys.length + 1));
+  const selectedKeys = keys.sort(() => 0.5 - Math.random()).slice(0, numberOfKeysToSelect);
+  
+  // For each selected key, select at least one value from the array
+  selectedKeys.forEach(key => {
+    const values = additionalFieldKeys[key];
+    const numberOfValuesToSelect = Math.floor(Math.random() * values.length) + 1;
+    const selectedValues = values.sort(() => 0.5 - Math.random()).slice(0, numberOfValuesToSelect);
+    result[key] = selectedValues.join(', ');
+  });
+  return result; 
+}
+
 async function seedDatabase() {
   const db = await open({
     filename: path.join(process.cwd(), 'src', 'database', 'db.sqlite'),
@@ -13,7 +31,7 @@ async function seedDatabase() {
   const migrationFilePath = path.resolve(
     __dirname,
     'migrations',
-    '0002_seed_patients.sql'
+    '0001_initial.sql'
   );
 
   // Ensure the table creation script has been run
@@ -25,7 +43,7 @@ async function seedDatabase() {
 
   // Insert 100 rows with random data
   const stmt = await db.prepare(
-    'INSERT INTO patients (first_name, middle_name, last_name, date_of_birth, status, addresses, additional_fields) VALUES (?, ?, ?, ?, ?, ?, ?)'
+    'INSERT INTO patients (first_name, middle_name, last_name, date_of_birth, status, addresses, phone_numbers, additional_fields) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
   );
   const statuses = ['Inquiry', 'Onboarding', 'Active', 'Churned'];
 
@@ -41,15 +59,18 @@ async function seedDatabase() {
     const addresses = JSON.stringify([
       {
         addressLine1: faker.location.streetAddress(),
-        addressLine2: faker.location.buildingNumber(),
+        addressLine2: faker.location.secondaryAddress(),
         city: faker.location.city(),
         state: faker.location.state(),
         zipcode: faker.location.zipCode(),
       },
     ]);
-    const additionalFields = JSON.stringify({
-      'Preferred Language': 'English',
-    });
+    const additionalFieldKeys = {'Preferred Language(s)': ['English', 'French', 'Spanish', 'Mandarin'],
+     'Medications': ['adderral', 'wellbutrin', 'hydroxyzine'], 
+     'Other diagnoses': ['Liver disease', 'ADHD', 'Depression', 'Generalize Anxiety disorder', 'Cerebral Palsy', 'OCD']} 
+
+    const additionalFields = JSON.stringify(getRandomAdditionalFields(additionalFieldKeys)); 
+    const phoneNumbers = JSON.stringify([faker.phone.number()]); 
 
     await stmt.run(
       firstName,
@@ -58,7 +79,8 @@ async function seedDatabase() {
       dateOfBirth,
       status,
       addresses,
-      additionalFields
+      phoneNumbers,
+      additionalFields,
     );
   }
   await stmt.finalize();

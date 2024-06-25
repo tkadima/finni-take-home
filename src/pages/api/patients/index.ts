@@ -8,7 +8,7 @@ export default async function handler(
   const db = await getDb();
 
   if (req.method === 'GET') {
-    // Add Server side pagination? 
+    // Add Server side pagination?
     const data = await db.all('SELECT * FROM patients');
     res.status(200).json(data);
   } else if (req.method === 'POST') {
@@ -26,7 +26,13 @@ export default async function handler(
     }
 
     for (const address of addresses) {
-      if (!address.street || !address.city || !address.state || !address.zip) {
+      console.log('address', address);
+      if (
+        !address.addressLine1 ||
+        !address.city ||
+        !address.state ||
+        !address.zipcode
+      ) {
         return res
           .status(400)
           .json({ message: 'Required address fields are missing' });

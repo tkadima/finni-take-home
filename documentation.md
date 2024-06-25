@@ -18,21 +18,31 @@ Given my limited time, I wanted to make sure my setup worked before delving furt
 
 I added a migration to create a `patients` table in the database and a seed script to populate it with sample data. I chose to store the `addresses` and `additional_fields` as JSON to avoid creating additional tables and unnecessary joins.
 
-```sql
-CREATE TABLE IF NOT EXISTS patients (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  first_name TEXT NOT NULL,
-  middle_name TEXT,
-  last_name TEXT NOT NULL,
-  date_of_birth TEXT NOT NULL,
-  status TEXT CHECK(status IN ('Inquiry', 'Onboarding', 'Active', 'Churned')) NOT NULL,
-  addresses JSON,
-  additional_fields JSON
-);
-```
-
 ## Step 4 - Display patient data in data table
 
 I displayed the data using a MUI DataGrid. The columns are populated based on the specified fields. The first, middle, and last names are aggregated into one column, and additional fields are grouped into a separate column. Then, I customized the theme of the grid using the logo, fonts, and colors from FiniHealth.com.
 ![DataGrid](public/datagrid-plain.png)
 ![DataGrid](public/datagrid-customized.png)
+
+## Step 5 - Allow CRUD Operations on Patient Data
+
+The next step was to enable providers to manage patients on the grid. I interpreted "manage" to include creating, updating, and deleting patient records. While MUI typically allows updates directly within the grid, the large amount of data involved made it impractical to create an "edit" view that would remain readable. Therefore, I opted to use a modal instead. Given the extensive data to manage for a single patient, I divided the modal into tabs: one for basic patient data (first name, last name, middle name, date of birth, status), another for addresses, and a final tab for configurable data.
+
+The same modal is used for both creating and editing patients; the only difference is that the form is pre-filled with the patient's current information when in "edit" mode. For deletions, I added a confirmation dialog to ensure users have a chance to confirm their intent to delete a particular patient.
+
+I enhanced my useFetch hook to support additional operations. The mutate function within the hook triggers SWR to re-fetch data after a mutation, ensuring that changes are immediately reflected in the UI.
+
+Additional Details:
+PatientModal.tsx: This file contains the implementation of the modal used for both creating and editing patient records. The modal is divided into tabs to handle different sections of patient data efficiently.
+
+DeleteWarningDialog.tsx: This file includes the implementation of the confirmation dialog that appears when a user attempts to delete a patient record. It provides an extra layer of user confirmation to prevent accidental deletions.
+
+useFetch.ts: This custom hook has been extended to handle CRUD operations. It ensures that data mutations trigger a re-fetch, keeping the grid data up-to-date.
+
+index.tsx: The main file where the patient management functionality is integrated, including the grid and modal invocation logic.
+
+These design choices aim to provide a clear, user-friendly interface for managing patient data while maintaining data integrity and immediate feedback for any changes made.
+
+## Step 6 - Search and Filter
+
+This is where using MUI comes in handy. MUI data grid makes searching and filtering data trivial with the "GridToolbar." The only change I had to make was to add a "full_name" field to the input data so it would be searchable.

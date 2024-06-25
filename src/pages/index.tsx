@@ -11,6 +11,8 @@ import PatientModal from '../app/components/PatientModal';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteWarningDialog from '../app/components/DeleteWarningDialog';
+import MutationSnackbar from '../app/components/MutationSnackbar';
+import { create } from 'domain';
 
 const generateGridColDef = (
   handleDeleteClick: (id: number) => void,
@@ -78,9 +80,9 @@ const PatientDataView = () => {
     useFetch('/api/patients');
 
   const rows = data?.map((patient: PatientData) => ({
-    ...patient, 
-    full_name: `${patient.last_name}, ${patient.first_name} ${patient.middle_name}`
-  }))
+    ...patient,
+    full_name: `${patient.last_name}, ${patient.first_name} ${patient.middle_name}`,
+  }));
 
   const [patientModalIsOpen, setPatientModalIsOpen] = useState<boolean>(false);
   const [selectedPatient, setSelectedPatient] = useState<PatientData | null>(
@@ -88,6 +90,8 @@ const PatientDataView = () => {
   );
   const [warningDialogIsOpen, setWarningDialogIsOpen] =
     useState<boolean>(false);
+
+  const [mutationSnackbarMessage, setMutationSnackbarMessage] = useState<string>('');
 
   const theme = useTheme();
 
@@ -111,7 +115,7 @@ const PatientDataView = () => {
   const handleCreatePatient = async (payload: any) => {
     try {
       const created = await post('/api/patients', payload);
-      console.log('creation result', created);
+      setMutationSnackbarMessage(`Created a new patient: ${created.firstName} ${created.lastName}`);
       setPatientModalIsOpen(false);
     } catch (error) {
       console.log('Error creating patient');
@@ -121,7 +125,9 @@ const PatientDataView = () => {
   const handleEditPatient = async (payload: any) => {
     try {
       if (selectedPatient) {
-        await put(`/api/patients/${selectedPatient.id}`, payload);
+        const updated = await put(`/api/patients/${selectedPatient.id}`, payload);
+        console.log('updated', updated); 
+        setMutationSnackbarMessage(`Updated patient: ${updated.firstName} ${updated.lastName}`);
       }
       setPatientModalIsOpen(false);
     } catch (error) {
@@ -132,8 +138,9 @@ const PatientDataView = () => {
   const handleDeletePatient = async () => {
     try {
       if (selectedPatient) {
-        const result = await del(`/api/patients/${selectedPatient.id}`);
-        console.log('Delete result:', result);
+        const deleted = await del(`/api/patients/${selectedPatient.id}`);
+        setMutationSnackbarMessage(deleted.message);
+        console.log('Delete result:', deleted.message);
         setWarningDialogIsOpen(false);
       }
     } catch (error) {
@@ -191,6 +198,11 @@ const PatientDataView = () => {
           rows={rows}
         />
       </Box>
+      <MutationSnackbar
+        isOpen={mutationSnackbarMessage !== null}
+        onCloseSnackbar={() => setMutationSnackbarMessage('')}
+        message={mutationSnackbarMessage}
+      />
     </Container>
   );
 };

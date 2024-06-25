@@ -9,7 +9,7 @@ const useFetch = (url: string) => {
   const post = async (url: string, payload: any) => {
     try {
       const response = await axios.post(url, payload);
-      mutate('/api/patients'); // Revalidate the data
+      mutate('/api/patients');
       return response.data;
     } catch (err) {
       throw err;
@@ -19,7 +19,7 @@ const useFetch = (url: string) => {
   const put = async (url: string, payload: any) => {
     try {
       const response = await axios.put(url, payload);
-      mutate('/api/patients'); // Revalidate the data
+      mutate('/api/patients');
       return response.data;
     } catch (err) {
       throw err;
@@ -29,7 +29,7 @@ const useFetch = (url: string) => {
   const del = async (url: string) => {
     try {
       const response = await axios.delete(url);
-      mutate('/api/patients'); // Revalidate the data
+      mutate('/api/patients');
       return response.data;
     } catch (err) {
       throw err;

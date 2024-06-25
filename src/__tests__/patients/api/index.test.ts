@@ -47,7 +47,12 @@ describe('/api/patients', () => {
         dob: '1990-01-01',
         status: 'Active',
         addresses: [
-          { street: '123 Main St', city: 'Anytown', state: 'CA', zip: '12345' },
+          {
+            addressLine1: '123 Main St',
+            city: 'Anytown',
+            state: 'CA',
+            zipcode: '12345',
+          },
         ],
         fields: { notes: 'Some notes' },
       },
@@ -72,7 +77,12 @@ describe('/api/patients', () => {
         '1990-01-01',
         'Active',
         JSON.stringify([
-          { street: '123 Main St', city: 'Anytown', state: 'CA', zip: '12345' },
+          {
+            addressLine1: '123 Main St',
+            city: 'Anytown',
+            state: 'CA',
+            zipcode: '12345',
+          },
         ]),
         JSON.stringify({ notes: 'Some notes' }),
       ]
@@ -86,7 +96,12 @@ describe('/api/patients', () => {
       dob: '1990-01-01',
       status: 'Active',
       addresses: [
-        { street: '123 Main St', city: 'Anytown', state: 'CA', zip: '12345' },
+        {
+          addressLine1: '123 Main St',
+          city: 'Anytown',
+          state: 'CA',
+          zipcode: '12345',
+        },
       ],
       fields: { notes: 'Some notes' },
     });
@@ -101,7 +116,12 @@ describe('/api/patients', () => {
         dob: '1990-01-01',
         status: 'Active',
         addresses: [
-          { street: '123 Main St', city: 'Anytown', state: 'CA', zip: '12345' },
+          {
+            addressLine1: '123 Main St',
+            city: 'Anytown',
+            state: 'CA',
+            zipcode: '12345',
+          },
         ],
         fields: { notes: 'Some notes' },
       },
@@ -154,7 +174,9 @@ describe('/api/patients', () => {
         lastName: 'Smith',
         dob: '1990-01-01',
         status: 'Active',
-        addresses: [{ street: '123 Main St', city: 'Anytown', state: 'CA' }], // Missing zip
+        addresses: [
+          { addressLine1: '123 Main St', city: 'Anytown', state: 'CA' },
+        ], // Missing zipcode
         fields: { notes: 'Some notes' },
       },
     } as unknown as NextApiRequest;
@@ -181,7 +203,12 @@ describe('/api/patients', () => {
         dob: '1990-01-01',
         status: 'Active',
         addresses: [
-          { street: '123 Main St', city: 'Anytown', state: 'CA', zip: '12345' },
+          {
+            addressLine1: '123 Main St',
+            city: 'Anytown',
+            state: 'CA',
+            zipcode: '12345',
+          },
         ],
         fields: { '': 'Some value' }, // Empty key
       },

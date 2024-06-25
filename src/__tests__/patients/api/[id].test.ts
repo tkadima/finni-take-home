@@ -67,7 +67,7 @@ describe('/api/patients/[id]', () => {
         lastName: 'Doe',
         dob: '2000-01-01',
         status: 'Active',
-        addresses: [{ street: '123 Main St', city: 'Anytown' }],
+        addresses: [{ addressLine1: '123 Main St', city: 'Anytown' }],
         fields: { notes: 'Some notes' },
       },
     } as unknown as NextApiRequest;
@@ -90,7 +90,7 @@ describe('/api/patients/[id]', () => {
         'Doe',
         '2000-01-01',
         'Active',
-        JSON.stringify([{ street: '123 Main St', city: 'Anytown' }]),
+        JSON.stringify([{ addressLine1: '123 Main St', city: 'Anytown' }]),
         JSON.stringify({ notes: 'Some notes' }),
         '1',
       ]
@@ -103,7 +103,7 @@ describe('/api/patients/[id]', () => {
       lastName: 'Doe',
       dob: '2000-01-01',
       status: 'Active',
-      addresses: [{ street: '123 Main St', city: 'Anytown' }],
+      addresses: [{ addressLine1: '123 Main St', city: 'Anytown' }],
       fields: { notes: 'Some notes' },
     });
   });
@@ -118,7 +118,7 @@ describe('/api/patients/[id]', () => {
         lastName: 'Doe',
         dob: '1992-02-02',
         status: 'Active',
-        addresses: [{ street: '456 Elm St', city: 'Othertown' }],
+        addresses: [{ addressLine1: '456 Elm St', city: 'Othertown' }],
         fields: {},
       },
     } as unknown as NextApiRequest;
@@ -141,7 +141,7 @@ describe('/api/patients/[id]', () => {
         'Doe',
         '1992-02-02',
         'Active',
-        JSON.stringify([{ street: '456 Elm St', city: 'Othertown' }]),
+        JSON.stringify([{ addressLine1: '456 Elm St', city: 'Othertown' }]),
         JSON.stringify({}),
         '2',
       ]
@@ -154,7 +154,7 @@ describe('/api/patients/[id]', () => {
       lastName: 'Doe',
       dob: '1992-02-02',
       status: 'Active',
-      addresses: [{ street: '456 Elm St', city: 'Othertown' }],
+      addresses: [{ addressLine1: '456 Elm St', city: 'Othertown' }],
       fields: {},
     });
   });
@@ -169,7 +169,7 @@ describe('/api/patients/[id]', () => {
         lastName: 'Smith',
         dob: '1985-05-05',
         status: 'Inactive',
-        addresses: [{ street: '789 Oak St', city: 'Newtown' }],
+        addresses: [{ addressLine1: '789 Oak St', city: 'Newtown' }],
         fields: { notes: 'Updated notes' },
       },
     } as unknown as NextApiRequest;
@@ -192,7 +192,7 @@ describe('/api/patients/[id]', () => {
         'Smith',
         '1985-05-05',
         'Inactive',
-        JSON.stringify([{ street: '789 Oak St', city: 'Newtown' }]),
+        JSON.stringify([{ addressLine1: '789 Oak St', city: 'Newtown' }]),
         JSON.stringify({ notes: 'Updated notes' }),
         '3',
       ]
@@ -205,7 +205,7 @@ describe('/api/patients/[id]', () => {
       lastName: 'Smith',
       dob: '1985-05-05',
       status: 'Inactive',
-      addresses: [{ street: '789 Oak St', city: 'Newtown' }],
+      addresses: [{ addressLine1: '789 Oak St', city: 'Newtown' }],
       fields: { notes: 'Updated notes' },
     });
   });
@@ -220,7 +220,7 @@ describe('/api/patients/[id]', () => {
         lastName: 'Johnson',
         dob: '1970-07-07',
         status: 'Inquiry',
-        addresses: [{ street: '101 Pine St', city: 'Oldtown' }],
+        addresses: [{ addressLine1: '101 Pine St', city: 'Oldtown' }],
         fields: {},
       },
     } as unknown as NextApiRequest;
@@ -243,7 +243,7 @@ describe('/api/patients/[id]', () => {
         'Johnson',
         '1970-07-07',
         'Inquiry',
-        JSON.stringify([{ street: '101 Pine St', city: 'Oldtown' }]),
+        JSON.stringify([{ addressLine1: '101 Pine St', city: 'Oldtown' }]),
         JSON.stringify({}),
         '4',
       ]
@@ -256,7 +256,7 @@ describe('/api/patients/[id]', () => {
       lastName: 'Johnson',
       dob: '1970-07-07',
       status: 'Inquiry',
-      addresses: [{ street: '101 Pine St', city: 'Oldtown' }],
+      addresses: [{ addressLine1: '101 Pine St', city: 'Oldtown' }],
       fields: {},
     });
   });

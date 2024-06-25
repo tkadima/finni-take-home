@@ -12,12 +12,17 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteWarningDialog from '../app/components/DeleteWarningDialog';
 import MutationSnackbar from '../app/components/MutationSnackbar';
-import { create } from 'domain';
 
 const generateGridColDef = (
   handleDeleteClick: (id: number) => void,
-  handleEditClick: (id: number) => void
+  handleEditClick: (id: number) => void,
+  additionalFields?: string[]
 ): GridColDef[] => {
+  let configuredColumns: GridColDef[] = [];
+  if (additionalFields)
+    configuredColumns = additionalFields?.map(
+      (field) => ({ field, headerName: field, width: 200 }) as GridColDef
+    );
   return [
     { field: 'id', headerName: 'ID', width: 70 },
     {
@@ -33,20 +38,15 @@ const generateGridColDef = (
       width: 300,
       renderCell: (params) => {
         const addresses: Address[] = JSON.parse(params.value);
-        return addresses.map((address) => `${address.addressLine1}`).join(', ');
-      },
-    },
-    {
-      field: 'additional_fields',
-      headerName: 'Additional Fields',
-      width: 300,
-      renderCell: (params) => {
-        const additionalFields = JSON.parse(params.value);
-        return Object.keys(additionalFields)
-          .map((key: string) => `${key}: ${additionalFields[key]}`)
+        return addresses
+          .map(
+            (address) =>
+              `${address.addressLine1} ${address.city}, ${address.state}`
+          )
           .join(', ');
       },
     },
+    ...configuredColumns,
     {
       field: 'actions',
       type: 'actions',
@@ -79,10 +79,24 @@ const PatientDataView = () => {
   const { data, isLoading, isError, post, put, del } =
     useFetch('/api/patients');
 
-  const rows = data?.map((patient: PatientData) => ({
-    ...patient,
-    full_name: `${patient.last_name}, ${patient.first_name} ${patient.middle_name}`,
-  }));
+  const rows = data?.map((patient: PatientData) => {
+    const additionalFields = JSON.parse(patient.additional_fields) || {};
+    return {
+      ...patient,
+      full_name: `${patient.last_name}, ${patient.first_name} ${patient.middle_name}`,
+      ...additionalFields,
+    };
+  });
+
+  const getAdditionalFields = () => {
+    const allKeys = rows.reduce((keys: string[], patient: any) => {
+      if (patient.additional_fields) {
+        keys.push(...Object.keys(JSON.parse(patient.additional_fields)));
+      }
+      return keys;
+    }, []);
+    return Array.from(new Set<string>(allKeys));
+  };
 
   const [patientModalIsOpen, setPatientModalIsOpen] = useState<boolean>(false);
   const [selectedPatient, setSelectedPatient] = useState<PatientData | null>(
@@ -91,7 +105,8 @@ const PatientDataView = () => {
   const [warningDialogIsOpen, setWarningDialogIsOpen] =
     useState<boolean>(false);
 
-  const [mutationSnackbarMessage, setMutationSnackbarMessage] = useState<string>('');
+  const [mutationSnackbarMessage, setMutationSnackbarMessage] =
+    useState<string>('');
 
   const theme = useTheme();
 
@@ -115,7 +130,9 @@ const PatientDataView = () => {
   const handleCreatePatient = async (payload: any) => {
     try {
       const created = await post('/api/patients', payload);
-      setMutationSnackbarMessage(`Created a new patient: ${created.firstName} ${created.lastName}`);
+      setMutationSnackbarMessage(
+        `Created a new patient: ${created.firstName} ${created.lastName}`
+      );
       setPatientModalIsOpen(false);
     } catch (error) {
       console.log('Error creating patient');
@@ -125,9 +142,13 @@ const PatientDataView = () => {
   const handleEditPatient = async (payload: any) => {
     try {
       if (selectedPatient) {
-        const updated = await put(`/api/patients/${selectedPatient.id}`, payload);
-        console.log('updated', updated); 
-        setMutationSnackbarMessage(`Updated patient: ${updated.firstName} ${updated.lastName}`);
+        const updated = await put(
+          `/api/patients/${selectedPatient.id}`,
+          payload
+        );
+        setMutationSnackbarMessage(
+          `Updated patient: ${updated.firstName} ${updated.lastName}`
+        );
       }
       setPatientModalIsOpen(false);
     } catch (error) {
@@ -140,7 +161,6 @@ const PatientDataView = () => {
       if (selectedPatient) {
         const deleted = await del(`/api/patients/${selectedPatient.id}`);
         setMutationSnackbarMessage(deleted.message);
-        console.log('Delete result:', deleted.message);
         setWarningDialogIsOpen(false);
       }
     } catch (error) {
@@ -194,12 +214,16 @@ const PatientDataView = () => {
               color: theme.palette.common.white,
             },
           }}
-          columns={generateGridColDef(handleDeleteClick, handleEditClick)}
+          columns={generateGridColDef(
+            handleDeleteClick,
+            handleEditClick,
+            getAdditionalFields()
+          )}
           rows={rows}
         />
       </Box>
       <MutationSnackbar
-        isOpen={mutationSnackbarMessage !== null}
+        isOpen={!!mutationSnackbarMessage}
         onCloseSnackbar={() => setMutationSnackbarMessage('')}
         message={mutationSnackbarMessage}
       />

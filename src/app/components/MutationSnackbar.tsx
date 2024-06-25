@@ -3,18 +3,17 @@ import { Snackbar } from '@mui/material';
 type MutationSnackbarProps = {
   isOpen: boolean;
   onCloseSnackbar: () => void;
-  message: string; 
+  message: string;
 };
 const MutationSnackbar = ({
   isOpen,
   onCloseSnackbar,
   message,
 }: MutationSnackbarProps) => {
-
   return (
     <Snackbar
       open={isOpen}
-      autoHideDuration={60000}
+      autoHideDuration={6000}
       onClose={onCloseSnackbar}
       message={message}
     />

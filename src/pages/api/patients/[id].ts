@@ -20,28 +20,34 @@ export default async function handler(
     }
   } else if (req.method === 'PUT') {
     const { id } = req.query;
-    const { firstName, middleName, lastName, dob, status, addresses, fields } =
+    const { firstName, middleName, lastName, dob, status, addresses, primaryPhoneNumber, secondaryPhoneNumber, fields } =
       req.body;
 
     const addressesJson = JSON.stringify(addresses || []);
     const fieldsJson = JSON.stringify(fields || {});
+    const phoneNumbers = [primaryPhoneNumber]; 
+
+    if (secondaryPhoneNumber) phoneNumbers.push(secondaryPhoneNumber);
+    const phoneJson = JSON.stringify(phoneNumbers); 
 
     const sql = `
       UPDATE patients
-      SET first_name = ?, middle_name = ?, last_name = ?, date_of_birth = ?, status = ?, addresses = ?, additional_fields = ?
-      WHERE id = ?
+      SET first_name = ?, middle_name = ?, last_name = ?, date_of_birth = ?, status = ?, addresses = ?, phone_numbers = ?, additional_fields = ?
+       WHERE id = ?
     `;
 
-    const data = await db.run(sql, [
+    await db.run(sql, [
       firstName || '',
       middleName || '',
       lastName || '',
       dob || '',
-      status || 'Inquiry', // TODO: check with miquel
+      status || 'Inquiry',
       addressesJson,
+      phoneJson,
       fieldsJson,
       id,
     ]);
+
 
     res.status(200).json({
       id,
@@ -50,6 +56,8 @@ export default async function handler(
       lastName,
       dob,
       status,
+      primaryPhoneNumber,
+      secondaryPhoneNumber,
       addresses,
       fields,
     });

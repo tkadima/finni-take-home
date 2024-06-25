@@ -12,10 +12,10 @@ export default async function handler(
     const data = await db.all('SELECT * FROM patients');
     res.status(200).json(data);
   } else if (req.method === 'POST') {
-    const { firstName, middleName, lastName, dob, status, addresses, fields } =
+    const { firstName, middleName, lastName, dob, status, addresses, fields, primaryPhoneNumber, secondaryPhoneNumber } =
       req.body;
 
-    if (!firstName || !lastName || !dob || !status) {
+    if (!firstName || !lastName || !dob || !status || !primaryPhoneNumber) {
       return res.status(400).json({ message: 'Required fields are missing' });
     }
 
@@ -24,9 +24,9 @@ export default async function handler(
         .status(400)
         .json({ message: 'At least one address is required' });
     }
+ 
 
     for (const address of addresses) {
-      console.log('address', address);
       if (
         !address.addressLine1 ||
         !address.city ||
@@ -52,14 +52,19 @@ export default async function handler(
     // Convert addresses and fields to JSON strings
     const addressesJson = JSON.stringify(addresses);
     const fieldsJson = JSON.stringify(fields);
+    const phoneNumbers = [primaryPhoneNumber]; 
 
+    if (secondaryPhoneNumber) phoneNumbers.push(secondaryPhoneNumber);
+    const phoneJson = JSON.stringify(phoneNumbers); 
+    console.log('ph', phoneJson); 
     const sql = `
       INSERT INTO patients (
-        first_name, middle_name, last_name, date_of_birth, status, addresses, additional_fields
-      ) VALUES (?, ?, ?, ?, ?, ?, ?)
+        first_name, middle_name, last_name, date_of_birth, status, addresses, phone_numbers, additional_fields
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     try {
+      console.log('trying...')
       const data = await db.run(sql, [
         firstName,
         middleName,
@@ -67,8 +72,10 @@ export default async function handler(
         dob,
         status,
         addressesJson,
+        phoneJson,
         fieldsJson,
       ]);
+      console.log('data trying', data); 
 
       res.status(201).json({ id: data.lastID, ...req.body });
     } catch (error: any) {

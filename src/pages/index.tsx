@@ -89,7 +89,6 @@ const PatientDataView = () => {
     useFetch('/api/patients');
 
   const rows = data?.map((patient: PatientData) => {
-    console.log('patient', patient); 
     const additionalFields = JSON.parse(patient.additional_fields) || {};
     return {
       ...patient,
@@ -97,6 +96,7 @@ const PatientDataView = () => {
       ...additionalFields,
     };
   });
+
 
   const getAdditionalFields = () => {
     const allKeys = rows.reduce((keys: string[], patient: any) => {
@@ -145,7 +145,7 @@ const PatientDataView = () => {
       );
       setPatientModalIsOpen(false);
     } catch (error) {
-      console.log('Error creating patient');
+      console.log('Error creating patient', error);
     }
   };
 

@@ -46,6 +46,7 @@ describe('/api/patients', () => {
         lastName: 'Smith',
         dob: '1990-01-01',
         status: 'Active',
+        primaryPhoneNumber: '652-234-2311',
         addresses: [
           {
             addressLine1: '123 Main St',
@@ -67,8 +68,8 @@ describe('/api/patients', () => {
     expect(dbMock.run).toHaveBeenCalledWith(
       `
       INSERT INTO patients (
-        first_name, middle_name, last_name, date_of_birth, status, addresses, additional_fields
-      ) VALUES (?, ?, ?, ?, ?, ?, ?)
+        first_name, middle_name, last_name, date_of_birth, status, addresses, phone_numbers, additional_fields
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `,
       [
         'Sam',
@@ -84,6 +85,7 @@ describe('/api/patients', () => {
             zipcode: '12345',
           },
         ]),
+        JSON.stringify(['652-234-2311']),
         JSON.stringify({ notes: 'Some notes' }),
       ]
     );
@@ -103,6 +105,7 @@ describe('/api/patients', () => {
           zipcode: '12345',
         },
       ],
+      primaryPhoneNumber: '652-234-2311',
       fields: { notes: 'Some notes' },
     });
   });
@@ -149,6 +152,7 @@ describe('/api/patients', () => {
         dob: '1990-01-01',
         status: 'Active',
         addresses: [],
+        primaryPhoneNumber: '652-234-2311',
         fields: { notes: 'Some notes' },
       },
     } as unknown as NextApiRequest;
@@ -177,6 +181,7 @@ describe('/api/patients', () => {
         addresses: [
           { addressLine1: '123 Main St', city: 'Anytown', state: 'CA' },
         ], // Missing zipcode
+        primaryPhoneNumber: '652-234-2311',
         fields: { notes: 'Some notes' },
       },
     } as unknown as NextApiRequest;
@@ -210,6 +215,7 @@ describe('/api/patients', () => {
             zipcode: '12345',
           },
         ],
+        primaryPhoneNumber: '652-234-2311',
         fields: { '': 'Some value' }, // Empty key
       },
     } as unknown as NextApiRequest;

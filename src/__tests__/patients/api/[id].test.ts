@@ -68,6 +68,7 @@ describe('/api/patients/[id]', () => {
         dob: '2000-01-01',
         status: 'Active',
         addresses: [{ addressLine1: '123 Main St', city: 'Anytown' }],
+        primaryPhoneNumber: '554-231-2232',
         fields: { notes: 'Some notes' },
       },
     } as unknown as NextApiRequest;
@@ -79,11 +80,7 @@ describe('/api/patients/[id]', () => {
     await handler(req, res);
 
     expect(dbMock.run).toHaveBeenCalledWith(
-      `
-      UPDATE patients
-      SET first_name = ?, middle_name = ?, last_name = ?, date_of_birth = ?, status = ?, addresses = ?, additional_fields = ?
-      WHERE id = ?
-    `,
+      `UPDATE patients SET first_name = ?, middle_name = ?, last_name = ?, date_of_birth = ?, status = ?, addresses = ?, phone_numbers = ?, additional_fields = ? WHERE id = ?`,
       [
         'John',
         'A',
@@ -91,6 +88,7 @@ describe('/api/patients/[id]', () => {
         '2000-01-01',
         'Active',
         JSON.stringify([{ addressLine1: '123 Main St', city: 'Anytown' }]),
+        JSON.stringify(['554-231-2232']),
         JSON.stringify({ notes: 'Some notes' }),
         '1',
       ]
@@ -104,6 +102,7 @@ describe('/api/patients/[id]', () => {
       dob: '2000-01-01',
       status: 'Active',
       addresses: [{ addressLine1: '123 Main St', city: 'Anytown' }],
+      primaryPhoneNumber: '554-231-2232',
       fields: { notes: 'Some notes' },
     });
   });
@@ -118,7 +117,15 @@ describe('/api/patients/[id]', () => {
         lastName: 'Doe',
         dob: '1992-02-02',
         status: 'Active',
-        addresses: [{ addressLine1: '456 Elm St', city: 'Othertown' }],
+        addresses: [
+          {
+            addressLine1: '456 Elm St',
+            city: 'Othertown',
+            state: 'WA',
+            zipcode: '99058',
+          },
+        ],
+        primaryPhoneNumber: '781-654-2324',
         fields: {},
       },
     } as unknown as NextApiRequest;
@@ -132,7 +139,7 @@ describe('/api/patients/[id]', () => {
     expect(dbMock.run).toHaveBeenCalledWith(
       `
       UPDATE patients
-      SET first_name = ?, middle_name = ?, last_name = ?, date_of_birth = ?, status = ?, addresses = ?, additional_fields = ?
+      SET first_name = ?, middle_name = ?, last_name = ?, date_of_birth = ?, status = ?, addresses = ?, phone_numbers = ?, additional_fields = ?
       WHERE id = ?
     `,
       [
@@ -141,7 +148,15 @@ describe('/api/patients/[id]', () => {
         'Doe',
         '1992-02-02',
         'Active',
-        JSON.stringify([{ addressLine1: '456 Elm St', city: 'Othertown' }]),
+        JSON.stringify([
+          {
+            addressLine1: '456 Elm St',
+            city: 'Othertown',
+            state: 'WA',
+            zipcode: '99058',
+          },
+        ]),
+        JSON.stringify(['781-654-2324']),
         JSON.stringify({}),
         '2',
       ]
@@ -154,7 +169,15 @@ describe('/api/patients/[id]', () => {
       lastName: 'Doe',
       dob: '1992-02-02',
       status: 'Active',
-      addresses: [{ addressLine1: '456 Elm St', city: 'Othertown' }],
+      addresses: [
+        {
+          addressLine1: '456 Elm St',
+          city: 'Othertown',
+          state: 'WA',
+          zipcode: '99058',
+        },
+      ],
+      primaryPhoneNumber: '781-654-2324',
       fields: {},
     });
   });
@@ -168,8 +191,16 @@ describe('/api/patients/[id]', () => {
         middleName: 'B',
         lastName: 'Smith',
         dob: '1985-05-05',
-        status: 'Inactive',
-        addresses: [{ addressLine1: '789 Oak St', city: 'Newtown' }],
+        status: 'Active',
+        addresses: [
+          {
+            addressLine1: '789 Oak St',
+            city: 'Newtown',
+            state: 'MA',
+            zipcode: '02145',
+          },
+        ],
+        primaryPhoneNumber: '781-654-2324',
         fields: { notes: 'Updated notes' },
       },
     } as unknown as NextApiRequest;
@@ -181,18 +212,22 @@ describe('/api/patients/[id]', () => {
     await handler(req, res);
 
     expect(dbMock.run).toHaveBeenCalledWith(
-      `
-      UPDATE patients
-      SET first_name = ?, middle_name = ?, last_name = ?, date_of_birth = ?, status = ?, addresses = ?, additional_fields = ?
-      WHERE id = ?
-    `,
+      `UPDATE patients SET first_name = ?, middle_name = ?, last_name = ?, date_of_birth = ?, status = ?, addresses = ?, phone_numbers: ?, additional_fields = ? WHERE id = ?`,
       [
         'Alice',
         'B',
         'Smith',
         '1985-05-05',
         'Inactive',
-        JSON.stringify([{ addressLine1: '789 Oak St', city: 'Newtown' }]),
+        JSON.stringify([
+          {
+            addressLine1: '789 Oak St',
+            city: 'Newtown',
+            state: 'MA',
+            zipcode: '02145',
+          },
+        ]),
+        JSON.stringify(['781-654-2324']),
         JSON.stringify({ notes: 'Updated notes' }),
         '3',
       ]
@@ -204,8 +239,16 @@ describe('/api/patients/[id]', () => {
       middleName: 'B',
       lastName: 'Smith',
       dob: '1985-05-05',
-      status: 'Inactive',
-      addresses: [{ addressLine1: '789 Oak St', city: 'Newtown' }],
+      status: 'Active',
+      addresses: [
+        {
+          addressLine1: '789 Oak St',
+          city: 'Newtown',
+          state: 'MA',
+          zipcode: '02145',
+        },
+      ],
+      primaryPhoneNumber: '781-654-2324',
       fields: { notes: 'Updated notes' },
     });
   });
@@ -234,7 +277,7 @@ describe('/api/patients/[id]', () => {
     expect(dbMock.run).toHaveBeenCalledWith(
       `
       UPDATE patients
-      SET first_name = ?, middle_name = ?, last_name = ?, date_of_birth = ?, status = ?, addresses = ?, additional_fields = ?
+      SET first_name = ?, middle_name = ?, last_name = ?, date_of_birth = ?, status = ?, addresses = ?, phone_numbers: ?, additional_fields = ?
       WHERE id = ?
     `,
       [
@@ -373,6 +416,7 @@ describe('/api/patients/[id]', () => {
         lastName: 'White',
         dob: '1980-08-08',
         status: 'Active',
+        primaryPhoneNumber: '432-2341-1000',
         addresses: [],
         fields: {}, // Empty fields indicate deletion
       },
@@ -387,7 +431,7 @@ describe('/api/patients/[id]', () => {
     expect(dbMock.run).toHaveBeenCalledWith(
       `
       UPDATE patients
-      SET first_name = ?, middle_name = ?, last_name = ?, date_of_birth = ?, status = ?, addresses = ?, additional_fields = ?
+      SET first_name = ?, middle_name = ?, last_name = ?, date_of_birth = ?, status = ?, addresses = ?, phone_numbers = ?, additional_fields = ?
       WHERE id = ?
     `,
       [
@@ -398,6 +442,7 @@ describe('/api/patients/[id]', () => {
         'Active',
         JSON.stringify([]),
         JSON.stringify({}),
+        JSON.stringify(['432-2341-1000']),
         '7',
       ]
     );
@@ -410,6 +455,7 @@ describe('/api/patients/[id]', () => {
       dob: '1980-08-08',
       status: 'Active',
       addresses: [],
+      primaryPhoneNumber: '432-2341-1000',
       fields: {},
     });
   });

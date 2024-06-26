@@ -12,8 +12,17 @@ export default async function handler(
     const data = await db.all('SELECT * FROM patients');
     res.status(200).json(data);
   } else if (req.method === 'POST') {
-    const { firstName, middleName, lastName, dob, status, addresses, fields, primaryPhoneNumber, secondaryPhoneNumber } =
-      req.body;
+    const {
+      firstName,
+      middleName,
+      lastName,
+      dob,
+      status,
+      addresses,
+      fields,
+      primaryPhoneNumber,
+      secondaryPhoneNumber,
+    } = req.body;
 
     if (!firstName || !lastName || !dob || !status || !primaryPhoneNumber) {
       return res.status(400).json({ message: 'Required fields are missing' });
@@ -24,7 +33,6 @@ export default async function handler(
         .status(400)
         .json({ message: 'At least one address is required' });
     }
- 
 
     for (const address of addresses) {
       if (
@@ -52,11 +60,11 @@ export default async function handler(
     // Convert addresses and fields to JSON strings
     const addressesJson = JSON.stringify(addresses);
     const fieldsJson = JSON.stringify(fields);
-    const phoneNumbers = [primaryPhoneNumber]; 
+    const phoneNumbers = [primaryPhoneNumber];
 
     if (secondaryPhoneNumber) phoneNumbers.push(secondaryPhoneNumber);
-    const phoneJson = JSON.stringify(phoneNumbers); 
-    console.log('ph', phoneJson); 
+    const phoneJson = JSON.stringify(phoneNumbers);
+    console.log('ph', phoneJson);
     const sql = `
       INSERT INTO patients (
         first_name, middle_name, last_name, date_of_birth, status, addresses, phone_numbers, additional_fields
@@ -64,7 +72,7 @@ export default async function handler(
     `;
 
     try {
-      console.log('trying...')
+      console.log('trying...'); // fix this, why is database not being updated?
       const data = await db.run(sql, [
         firstName,
         middleName,
@@ -75,7 +83,7 @@ export default async function handler(
         phoneJson,
         fieldsJson,
       ]);
-      console.log('data trying', data); 
+      console.log('data trying', data);
 
       res.status(201).json({ id: data.lastID, ...req.body });
     } catch (error: any) {

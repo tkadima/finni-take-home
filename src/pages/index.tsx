@@ -47,13 +47,13 @@ const generateGridColDef = (
       },
     },
     {
-      field: 'phone_numbers', 
-      headerName: 'Phone Numbers', 
+      field: 'phone_numbers',
+      headerName: 'Phone Numbers',
       width: 200,
       renderCell: (params) => {
-        const phoneNumbers: string[] = JSON.parse(params.value); 
-        return phoneNumbers.map(phone => phone).join(', ');
-      }
+        const phoneNumbers: string[] = JSON.parse(params.value);
+        return phoneNumbers.map((phone) => phone).join(', ');
+      },
     },
     ...configuredColumns,
     {
@@ -96,7 +96,6 @@ const PatientDataView = () => {
       ...additionalFields,
     };
   });
-
 
   const getAdditionalFields = () => {
     const allKeys = rows.reduce((keys: string[], patient: any) => {

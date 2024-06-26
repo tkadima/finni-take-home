@@ -39,7 +39,6 @@ const PatientModal = ({
   onCreateNewPatient,
   onEditPatient,
 }: PatientModalPropTypes) => {
-
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
     middleName: '',
@@ -50,7 +49,7 @@ const PatientModal = ({
       { addressLine1: '', addressLine2: '', city: '', state: '', zipcode: '' },
     ],
     primaryPhoneNumber: '',
-    secondaryPhoneNumber: '',  
+    secondaryPhoneNumber: '',
     fields: {},
   });
   const [tabIndex, setTabIndex] = useState<number>(0);
@@ -87,7 +86,7 @@ const PatientModal = ({
         ],
         fields: patientAdditionalFields || {},
         primaryPhoneNumber: JSON.parse(patient.phone_numbers)[0] || '',
-        secondaryPhoneNumber:JSON.parse(patient.phone_numbers)[1] || ''
+        secondaryPhoneNumber: JSON.parse(patient.phone_numbers)[1] || '',
       });
     }
   }, [patient]);
@@ -146,7 +145,7 @@ const PatientModal = ({
     } else if (name.startsWith('configurableField')) {
       const [, field, indexStr] = name.split('-');
       const index = parseInt(indexStr, 10);
-      handleConfigurableFieldChange(field, index);      
+      handleConfigurableFieldChange(field, index);
     } else {
       setFormData((prevData) => ({
         ...prevData,
@@ -283,8 +282,7 @@ const PatientModal = ({
               fullWidth
               required
               margin="normal"
-            >
-            </TextField>
+            ></TextField>
             <TextField
               label="Secondary Phone Number"
               name="secondaryPhoneNumber"
@@ -292,8 +290,7 @@ const PatientModal = ({
               onChange={handleChange}
               fullWidth
               margin="normal"
-            >
-            </TextField>
+            ></TextField>
           </Box>
         )}
         {tabIndex === 1 && (

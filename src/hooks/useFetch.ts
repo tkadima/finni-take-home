@@ -22,7 +22,6 @@ const useFetch = (url: string) => {
       mutate('/api/patients');
       return response.data;
     } catch (err) {
-      console.log(err); 
       throw err;
     }
   };

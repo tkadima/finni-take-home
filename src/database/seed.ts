@@ -4,23 +4,30 @@ import fs from 'fs';
 import path from 'path';
 import { faker } from '@faker-js/faker';
 
-const getRandomAdditionalFields = (additionalFieldKeys: {[key: string]: string[]}) => {
+const getRandomAdditionalFields = (additionalFieldKeys: {
+  [key: string]: string[];
+}) => {
   const result: { [key: string]: string } = {};
   const keys = Object.keys(additionalFieldKeys);
-  
+
   // Randomly select 0 to all 3 keys
   const numberOfKeysToSelect = Math.floor(Math.random() * (keys.length + 1));
-  const selectedKeys = keys.sort(() => 0.5 - Math.random()).slice(0, numberOfKeysToSelect);
-  
+  const selectedKeys = keys
+    .sort(() => 0.5 - Math.random())
+    .slice(0, numberOfKeysToSelect);
+
   // For each selected key, select at least one value from the array
-  selectedKeys.forEach(key => {
+  selectedKeys.forEach((key) => {
     const values = additionalFieldKeys[key];
-    const numberOfValuesToSelect = Math.floor(Math.random() * values.length) + 1;
-    const selectedValues = values.sort(() => 0.5 - Math.random()).slice(0, numberOfValuesToSelect);
+    const numberOfValuesToSelect =
+      Math.floor(Math.random() * values.length) + 1;
+    const selectedValues = values
+      .sort(() => 0.5 - Math.random())
+      .slice(0, numberOfValuesToSelect);
     result[key] = selectedValues.join(', ');
   });
-  return result; 
-}
+  return result;
+};
 
 async function seedDatabase() {
   const db = await open({
@@ -65,12 +72,23 @@ async function seedDatabase() {
         zipcode: faker.location.zipCode(),
       },
     ]);
-    const additionalFieldKeys = {'Preferred Language(s)': ['English', 'French', 'Spanish', 'Mandarin'],
-     'Medications': ['adderral', 'wellbutrin', 'hydroxyzine'], 
-     'Other diagnoses': ['Liver disease', 'ADHD', 'Depression', 'Generalize Anxiety disorder', 'Cerebral Palsy', 'OCD']} 
+    const additionalFieldKeys = {
+      'Preferred Language(s)': ['English', 'French', 'Spanish', 'Mandarin'],
+      Medications: ['adderral', 'wellbutrin', 'hydroxyzine'],
+      'Other diagnoses': [
+        'Liver disease',
+        'ADHD',
+        'Depression',
+        'Generalize Anxiety disorder',
+        'Cerebral Palsy',
+        'OCD',
+      ],
+    };
 
-    const additionalFields = JSON.stringify(getRandomAdditionalFields(additionalFieldKeys)); 
-    const phoneNumbers = JSON.stringify([faker.phone.number()]); 
+    const additionalFields = JSON.stringify(
+      getRandomAdditionalFields(additionalFieldKeys)
+    );
+    const phoneNumbers = JSON.stringify([faker.phone.number()]);
 
     await stmt.run(
       firstName,
@@ -80,7 +98,7 @@ async function seedDatabase() {
       status,
       addresses,
       phoneNumbers,
-      additionalFields,
+      additionalFields
     );
   }
   await stmt.finalize();

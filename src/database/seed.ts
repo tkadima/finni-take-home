@@ -72,8 +72,8 @@ async function seedDatabase() {
         zipcode: faker.location.zipCode(),
       },
     ]);
-    const primaryPhoneNumber = faker.phone.number(); 
-    const secondaryPhoneNumber = faker.phone.number(); 
+    const primaryPhoneNumber = faker.phone.number();
+    const secondaryPhoneNumber = faker.phone.number();
 
     const additionalFieldKeys = {
       'Preferred Language(s)': ['English', 'French', 'Spanish', 'Mandarin'],
@@ -99,7 +99,7 @@ async function seedDatabase() {
       status,
       addresses,
       primaryPhoneNumber,
-      secondaryPhoneNumber,   
+      secondaryPhoneNumber,
       additionalFields
     );
   }

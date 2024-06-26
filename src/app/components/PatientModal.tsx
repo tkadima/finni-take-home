@@ -73,7 +73,7 @@ const PatientModal = ({
           },
         ],
         fields: patientAdditionalFields || {},
-        primaryPhoneNumber: patient.primary_phone_number|| '',
+        primaryPhoneNumber: patient.primary_phone_number || '',
         secondaryPhoneNumber: patient.secondary_phone_number || '',
       });
     }

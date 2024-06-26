@@ -39,10 +39,6 @@ export const generateGridColDef = (
       field: 'phone_numbers',
       headerName: 'Phone Numbers',
       width: 200,
-      renderCell: (params) => {
-        const phoneNumbers: string[] = params.value;
-        return phoneNumbers.map((phone) => phone).join(', ');
-      },
     },
     ...configuredColumns,
     {

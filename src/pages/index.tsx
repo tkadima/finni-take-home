@@ -38,13 +38,11 @@ const PatientDataView = ({ initialPatients }: PatientDataViewProps) => {
   } = useFetch('/api/patients', { initialData: initialPatients });
 
   const rows = patients.map((patient: PatientData) => {
-    const phoneNumbers = [patient.primary_phone_number];
-    phoneNumbers.push(patient.secondary_phone_number);
     const additionalFields = JSON.parse(patient.additional_fields) || {};
     return {
       ...patient,
       full_name: `${patient.last_name}, ${patient.first_name} ${patient.middle_name}`,
-      phone_numbers: phoneNumbers,
+      phone_numbers: `${patient.primary_phone_number}, ${patient.secondary_phone_number}`,
       ...additionalFields,
     };
   });

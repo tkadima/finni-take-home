@@ -46,3 +46,7 @@ These design choices aim to provide a clear, user-friendly interface for managin
 ## Step 6 - Search and Filter
 
 This is where using MUI comes in handy. MUI data grid makes searching and filtering data trivial with the "GridToolbar." The only change I had to make was to add a "full_name" field to the input data so it would be searchable.
+
+## Step 7 Optimizations
+
+I noticed that the initial page load was slow so I decided to use server-sider rendering to spead it up. I also used Lazy loading for the PatientModal, DeleteWarningDialog and MutationSnackbar

@@ -13,9 +13,12 @@ import { GetServerSideProps } from 'next';
 import axios from 'axios';
 
 const PatientModal = lazy(() => import('../app/components/PatientModal'));
-const DeleteWarningDialog = lazy(() => import('../app/components/DeleteWarningDialog'));
-const MutationSnackbar = lazy(() => import('../app/components/MutationSnackbar'));
-
+const DeleteWarningDialog = lazy(
+  () => import('../app/components/DeleteWarningDialog')
+);
+const MutationSnackbar = lazy(
+  () => import('../app/components/MutationSnackbar')
+);
 
 const generateGridColDef = (
   handleDeleteClick: (id: number) => void,
@@ -242,11 +245,11 @@ const PatientDataView = ({ initialPatients }: PatientDataViewProps) => {
         />
       </Box>
       <Suspense fallback={<div>Loading...</div>}>
-      <PatientModal
+        <PatientModal
           isOpen={patientModalIsOpen}
           onCloseModal={() => {
-            setSelectedPatient(null)
-            setPatientModalIsOpen(false)
+            setSelectedPatient(null);
+            setPatientModalIsOpen(false);
           }}
           onCreateNewPatient={handleCreatePatient}
           patient={selectedPatient ?? null}
@@ -255,8 +258,8 @@ const PatientDataView = ({ initialPatients }: PatientDataViewProps) => {
         <DeleteWarningDialog
           isOpen={warningDialogIsOpen}
           onCloseModal={() => {
-            setWarningDialogIsOpen(false)
-            setSelectedPatient(null)
+            setWarningDialogIsOpen(false);
+            setSelectedPatient(null);
           }}
           onConfirmDeletion={handleDeletePatient}
           patient={selectedPatient}

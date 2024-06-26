@@ -91,6 +91,30 @@ const PatientModal = ({
     }
   }, [patient]);
 
+  useEffect(() => {
+    if (!isOpen) {
+      setFormData({
+        firstName: '',
+        middleName: '',
+        lastName: '',
+        dob: '',
+        status: '',
+        addresses: [
+          {
+            addressLine1: '',
+            addressLine2: '',
+            city: '',
+            state: '',
+            zipcode: '',
+          },
+        ],
+        primaryPhoneNumber: '',
+        secondaryPhoneNumber: '',
+        fields: {},
+      });
+    }
+  }, [isOpen]);
+
   const handleTabChange = (_event: any, newIndex: number) => {
     setTabIndex(newIndex);
   };

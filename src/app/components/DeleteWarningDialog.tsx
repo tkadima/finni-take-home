@@ -20,7 +20,7 @@ const DeleteWarningDialog = ({
   patient,
   onConfirmDeletion,
 }: DeleteWarningDialogPropTypes) => {
-  if (!patient) return <div></div>
+  if (!patient) return <div></div>;
   return (
     <Dialog open={isOpen} onClose={onCloseModal}>
       <DialogTitle>

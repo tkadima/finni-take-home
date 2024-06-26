@@ -27,7 +27,9 @@ describe('API endpoint /api/patient/[id]', () => {
         status: 'Active',
         primaryPhoneNumber: '123-456-7890',
         secondaryPhoneNumber: '098-765-4321',
-        addresses: [{ street: '123 Main St', city: 'Anytown', zip: '12345' }],
+        addresses: [
+          { addressLine1: '123 Main St', city: 'Anytown', zip: '12345' },
+        ],
         fields: { field1: 'value1' },
       },
     } as unknown as NextApiRequest;
@@ -39,7 +41,7 @@ describe('API endpoint /api/patient/[id]', () => {
     await handler(req, res);
 
     expect(dbMock.run).toHaveBeenCalledWith(
-      'UPDATE patients SET first_name = ?, middle_name = ?, last_name = ?, date_of_birth = ?, status = ?, addresses = ?, phone_numbers = ?, additional_fields = ? WHERE id = ?',
+      'UPDATE patients SET first_name = ?, middle_name = ?, last_name = ?, date_of_birth = ?, status = ?, addresses = ?, primary_phone_number = ?, secondary_phone_number = ?, additional_fields = ? WHERE id = ?',
       [
         'John',
         'D',
@@ -47,9 +49,10 @@ describe('API endpoint /api/patient/[id]', () => {
         '1990-01-01',
         'Active',
         JSON.stringify([
-          { street: '123 Main St', city: 'Anytown', zip: '12345' },
+          { addressLine1: '123 Main St', city: 'Anytown', zip: '12345' },
         ]),
-        JSON.stringify(['123-456-7890', '098-765-4321']),
+        '123-456-7890',
+        '098-765-4321',
         JSON.stringify({ field1: 'value1' }),
         '1',
       ]
@@ -64,7 +67,9 @@ describe('API endpoint /api/patient/[id]', () => {
       status: 'Active',
       primaryPhoneNumber: '123-456-7890',
       secondaryPhoneNumber: '098-765-4321',
-      addresses: [{ street: '123 Main St', city: 'Anytown', zip: '12345' }],
+      addresses: [
+        { addressLine1: '123 Main St', city: 'Anytown', zip: '12345' },
+      ],
       fields: { field1: 'value1' },
     });
   });
@@ -92,7 +97,7 @@ describe('API endpoint /api/patient/[id]', () => {
     await handler(req, res);
 
     expect(dbMock.run).toHaveBeenCalledWith(
-      'UPDATE patients SET first_name = ?, middle_name = ?, last_name = ?, date_of_birth = ?, status = ?, addresses = ?, phone_numbers = ?, additional_fields = ? WHERE id = ?',
+      'UPDATE patients SET first_name = ?, middle_name = ?, last_name = ?, date_of_birth = ?, status = ?, addresses = ?, primary_phone_number = ?, secondary_phone_number = ?, additional_fields = ? WHERE id = ?',
       [
         'Eve',
         'F',
@@ -100,7 +105,8 @@ describe('API endpoint /api/patient/[id]', () => {
         '1980-08-08',
         'Active',
         JSON.stringify([]),
-        JSON.stringify(['432-2341-1000']),
+        '432-2341-1000',
+        undefined,
         JSON.stringify({}),
         '7',
       ]

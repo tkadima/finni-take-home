@@ -68,8 +68,8 @@ describe('/api/patients', () => {
     expect(dbMock.run).toHaveBeenCalledWith(
       `
       INSERT INTO patients (
-        first_name, middle_name, last_name, date_of_birth, status, addresses, phone_numbers, additional_fields
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        first_name, middle_name, last_name, date_of_birth, status, addresses, primary_phone_number, secondary_phone_number, additional_fields
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `,
       [
         'Sam',
@@ -85,7 +85,8 @@ describe('/api/patients', () => {
             zipcode: '12345',
           },
         ]),
-        JSON.stringify(['652-234-2311']),
+        '652-234-2311',
+        undefined,
         JSON.stringify({ notes: 'Some notes' }),
       ]
     );
@@ -126,6 +127,7 @@ describe('/api/patients', () => {
             zipcode: '12345',
           },
         ],
+        primaryPhoneNumer: '555-321-0092',
         fields: { notes: 'Some notes' },
       },
     } as unknown as NextApiRequest;

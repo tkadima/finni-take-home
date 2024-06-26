@@ -34,12 +34,8 @@ export default async function handler(
 
     const addressesJson = JSON.stringify(addresses || []);
     const fieldsJson = JSON.stringify(fields || {});
-    const phoneNumbers = [primaryPhoneNumber];
 
-    if (secondaryPhoneNumber) phoneNumbers.push(secondaryPhoneNumber);
-    const phoneJson = JSON.stringify(phoneNumbers);
-
-    const sql = `UPDATE patients SET first_name = ?, middle_name = ?, last_name = ?, date_of_birth = ?, status = ?, addresses = ?, phone_numbers = ?, additional_fields = ? WHERE id = ?`;
+    const sql = `UPDATE patients SET first_name = ?, middle_name = ?, last_name = ?, date_of_birth = ?, status = ?, addresses = ?, primary_phone_number = ?, secondary_phone_number = ?, additional_fields = ? WHERE id = ?`;
 
     await db.run(sql, [
       firstName || '',
@@ -48,7 +44,8 @@ export default async function handler(
       dob || '',
       status || 'Inquiry',
       addressesJson,
-      phoneJson,
+      primaryPhoneNumber,
+      secondaryPhoneNumber,
       fieldsJson,
       id,
     ]);

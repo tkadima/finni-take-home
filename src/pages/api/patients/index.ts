@@ -8,7 +8,6 @@ export default async function handler(
   const db = await getDb();
 
   if (req.method === 'GET') {
-    // Add Server side pagination?
     const data = await db.all('SELECT * FROM patients');
     res.status(200).json(data);
   } else if (req.method === 'POST') {
@@ -60,14 +59,11 @@ export default async function handler(
     // Convert addresses and fields to JSON strings
     const addressesJson = JSON.stringify(addresses);
     const fieldsJson = JSON.stringify(fields);
-    const phoneNumbers = [primaryPhoneNumber];
 
-    if (secondaryPhoneNumber) phoneNumbers.push(secondaryPhoneNumber);
-    const phoneJson = JSON.stringify(phoneNumbers);
     const sql = `
       INSERT INTO patients (
-        first_name, middle_name, last_name, date_of_birth, status, addresses, phone_numbers, additional_fields
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        first_name, middle_name, last_name, date_of_birth, status, addresses, primary_phone_number, secondary_phone_number, additional_fields
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     try {
@@ -78,7 +74,8 @@ export default async function handler(
         dob,
         status,
         addressesJson,
-        phoneJson,
+        primaryPhoneNumber,
+        secondaryPhoneNumber,
         fieldsJson,
       ]);
 

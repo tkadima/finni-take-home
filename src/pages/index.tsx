@@ -1,16 +1,10 @@
 import { lazy, Suspense, useState } from 'react';
 import { Box, Button, Container, Typography, useTheme } from '@mui/material';
 import useFetch from '../hooks/useFetch';
-import {
-  DataGrid,
-  GridActionsCellItem,
-  GridColDef,
-  GridToolbar,
-} from '@mui/x-data-grid';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import EditIcon from '@mui/icons-material/Edit';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { GetServerSideProps } from 'next';
 import axios from 'axios';
+import { generateGridColDef } from '../app/components/utils/generateGridColDef';
 
 const PatientModal = lazy(() => import('../app/components/PatientModal'));
 const DeleteWarningDialog = lazy(
@@ -19,77 +13,6 @@ const DeleteWarningDialog = lazy(
 const MutationSnackbar = lazy(
   () => import('../app/components/MutationSnackbar')
 );
-
-const generateGridColDef = (
-  handleDeleteClick: (id: number) => void,
-  handleEditClick: (id: number) => void,
-  additionalFields?: string[]
-): GridColDef[] => {
-  let configuredColumns: GridColDef[] = [];
-  if (additionalFields)
-    configuredColumns = additionalFields?.map(
-      (field) => ({ field, headerName: field, width: 200 }) as GridColDef
-    );
-  return [
-    { field: 'id', headerName: 'ID', width: 70 },
-    {
-      field: 'full_name',
-      headerName: 'Full Name',
-      width: 200,
-    },
-    { field: 'date_of_birth', headerName: 'Date of Birth', width: 150 },
-    { field: 'status', headerName: 'Status', width: 120 },
-    {
-      field: 'addresses',
-      headerName: 'Addresses',
-      width: 300,
-      renderCell: (params) => {
-        const addresses: Address[] = JSON.parse(params.value);
-        return addresses
-          .map(
-            (address) =>
-              `${address.addressLine1} ${address.city}, ${address.state}`
-          )
-          .join(', ');
-      },
-    },
-    {
-      field: 'phone_numbers',
-      headerName: 'Phone Numbers',
-      width: 200,
-      renderCell: (params) => {
-        const phoneNumbers: string[] = JSON.parse(params.value);
-        return phoneNumbers.map((phone) => phone).join(', ');
-      },
-    },
-    ...configuredColumns,
-    {
-      field: 'actions',
-      type: 'actions',
-      headerName: 'Actions',
-      width: 100,
-      cellClassName: 'actions',
-      renderCell: (params) => {
-        const { id } = params;
-        return [
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            className="textPrimary"
-            onClick={() => handleEditClick(id as number)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={() => handleDeleteClick(id as number)}
-            color="inherit"
-          />,
-        ];
-      },
-    },
-  ];
-};
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const response = await axios.get('http://localhost:3000/api/patients');

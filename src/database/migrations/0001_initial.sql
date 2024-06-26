@@ -8,7 +8,13 @@ CREATE TABLE IF NOT EXISTS patients (
   date_of_birth TEXT NOT NULL,
   status TEXT CHECK(status IN ('Inquiry', 'Onboarding', 'Active', 'Churned')) NOT NULL,
   addresses JSON,
-  primary_phone_number TEXT,
+  primary_phone_number TEXT NOT NULL,
   secondary_phone_number TEXT, 
   additional_fields JSON
+);
+
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  email TEXT NOT NULL,
+  password TEXT
 );

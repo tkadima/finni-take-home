@@ -20,6 +20,7 @@
     "@mui/x-data-grid": "^7.7.0",
     "@next/font": "^14.2.4",
     "axios": "^1.7.2",
+    "bcryptjs": "^2.4.3",
     "faker": "^5.5.3",
     "next": "14.2.4",
     "react": "^18",
@@ -30,9 +31,10 @@
     "ts-node": "^10.9.2"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/faker": "^6.6.9",
     "@types/jest": "^29.5.12",
-    "@types/node": "^20",
+    "@types/node": "^20.14.9",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/supertest": "^6.0.2",
@@ -42,6 +44,6 @@
     "prettier": "^3.3.2",
     "supertest": "^7.0.0",
     "ts-jest": "^29.1.5",
-    "typescript": "^5"
+    "typescript": "^5.5.2"
   }
 }

@@ -3,6 +3,7 @@ import { open } from 'sqlite';
 import fs from 'fs';
 import path from 'path';
 import { faker } from '@faker-js/faker';
+import bcrypt from 'bcryptjs';
 
 const getRandomAdditionalFields = (additionalFieldKeys: {
   [key: string]: string[];
@@ -47,6 +48,17 @@ async function seedDatabase() {
     'utf-8'
   );
   await db.exec(tableCreationScript);
+
+  // Hash the password
+  const password = 'test';
+  const hashedPassword = bcrypt.hashSync(password, 10);
+
+  // Insert the admin user with hashed password
+  await db.run(
+    `INSERT INTO users (email, password) VALUES (?, ?)`,
+    'admin@finnihealth.com',
+    hashedPassword
+  );
 
   // Insert 100 rows with random data
   const stmt = await db.prepare(

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { Box, Button, Container, Typography, useTheme } from '@mui/material';
 import useFetch from '../hooks/useFetch';
 import {
@@ -7,13 +7,15 @@ import {
   GridColDef,
   GridToolbar,
 } from '@mui/x-data-grid';
-import PatientModal from '../app/components/PatientModal';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteWarningDialog from '../app/components/DeleteWarningDialog';
-import MutationSnackbar from '../app/components/MutationSnackbar';
 import { GetServerSideProps } from 'next';
 import axios from 'axios';
+
+const PatientModal = lazy(() => import('../app/components/PatientModal'));
+const DeleteWarningDialog = lazy(() => import('../app/components/DeleteWarningDialog'));
+const MutationSnackbar = lazy(() => import('../app/components/MutationSnackbar'));
+
 
 const generateGridColDef = (
   handleDeleteClick: (id: number) => void,
@@ -207,23 +209,6 @@ const PatientDataView = ({ initialPatients }: PatientDataViewProps) => {
 
   return (
     <Container sx={{ padding: '50px' }}>
-      {patientModalIsOpen && (
-        <PatientModal
-          isOpen={patientModalIsOpen}
-          onCloseModal={() => setPatientModalIsOpen(false)}
-          onCreateNewPatient={handleCreatePatient}
-          patient={selectedPatient ?? null}
-          onEditPatient={handleEditPatient}
-        />
-      )}
-      {warningDialogIsOpen && selectedPatient && (
-        <DeleteWarningDialog
-          isOpen={warningDialogIsOpen}
-          onCloseModal={() => setWarningDialogIsOpen(false)}
-          onConfirmDeletion={handleDeletePatient}
-          patient={selectedPatient}
-        />
-      )}
       <Typography variant="h4" sx={{ paddingBottom: '20px' }}>
         Patient Data
       </Typography>
@@ -256,11 +241,32 @@ const PatientDataView = ({ initialPatients }: PatientDataViewProps) => {
           rows={rows}
         />
       </Box>
-      <MutationSnackbar
-        isOpen={!!mutationSnackbarMessage}
-        onCloseSnackbar={() => setMutationSnackbarMessage('')}
-        message={mutationSnackbarMessage}
-      />
+      <Suspense fallback={<div>Loading...</div>}>
+      <PatientModal
+          isOpen={patientModalIsOpen}
+          onCloseModal={() => {
+            setSelectedPatient(null)
+            setPatientModalIsOpen(false)
+          }}
+          onCreateNewPatient={handleCreatePatient}
+          patient={selectedPatient ?? null}
+          onEditPatient={handleEditPatient}
+        />
+        <DeleteWarningDialog
+          isOpen={warningDialogIsOpen}
+          onCloseModal={() => {
+            setWarningDialogIsOpen(false)
+            setSelectedPatient(null)
+          }}
+          onConfirmDeletion={handleDeletePatient}
+          patient={selectedPatient}
+        />
+        <MutationSnackbar
+          isOpen={!!mutationSnackbarMessage}
+          onCloseSnackbar={() => setMutationSnackbarMessage('')}
+          message={mutationSnackbarMessage}
+        />
+      </Suspense>
     </Container>
   );
 };

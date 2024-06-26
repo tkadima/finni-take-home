@@ -10,7 +10,7 @@ import {
 type DeleteWarningDialogPropTypes = {
   isOpen: boolean;
   onCloseModal: () => void;
-  patient: PatientData;
+  patient: PatientData | null;
   onConfirmDeletion: () => void;
 };
 
@@ -20,6 +20,7 @@ const DeleteWarningDialog = ({
   patient,
   onConfirmDeletion,
 }: DeleteWarningDialogPropTypes) => {
+  if (!patient) return <div></div>
   return (
     <Dialog open={isOpen} onClose={onCloseModal}>
       <DialogTitle>

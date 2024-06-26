@@ -22,3 +22,15 @@ interface PatientData {
   phone_numbers: string; // JSON string
   additional_fields: string; // JSON string
 }
+
+interface PatientFormData {
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  dob: string;
+  status: string;
+  addresses: Address[];
+  fields: { [key: string]: string };
+  primaryPhoneNumber: string;
+  secondaryPhoneNumber: string;
+}

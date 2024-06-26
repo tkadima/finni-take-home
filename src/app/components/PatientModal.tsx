@@ -12,24 +12,12 @@ import {
 } from '@mui/material';
 import { Add as AddIcon, Remove as RemoveIcon } from '@mui/icons-material';
 
-interface FormData {
-  firstName: string;
-  middleName: string;
-  lastName: string;
-  dob: string;
-  status: string;
-  addresses: Address[];
-  fields: { [key: string]: string };
-  primaryPhoneNumber: string;
-  secondaryPhoneNumber: string;
-}
-
 type PatientModalPropTypes = {
   isOpen: boolean;
   onCloseModal: () => void;
   patient: PatientData | null;
-  onCreateNewPatient: (formData: FormData) => void;
-  onEditPatient: (formData: FormData) => void;
+  onCreateNewPatient: (formData: PatientFormData) => void;
+  onEditPatient: (formData: PatientFormData) => void;
 };
 
 const PatientModal = ({
@@ -39,7 +27,7 @@ const PatientModal = ({
   onCreateNewPatient,
   onEditPatient,
 }: PatientModalPropTypes) => {
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<PatientFormData>({
     firstName: '',
     middleName: '',
     lastName: '',
@@ -191,7 +179,8 @@ const PatientModal = ({
   };
 
   const validateForm = () => {
-    const { firstName, lastName, dob, status, addresses, primaryPhoneNumber } = formData;
+    const { firstName, lastName, dob, status, addresses, primaryPhoneNumber } =
+      formData;
     const isFormValid =
       firstName.trim() !== '' &&
       lastName.trim() !== '' &&
@@ -203,8 +192,8 @@ const PatientModal = ({
           address.city.trim() !== '' &&
           address.state.trim() !== '' &&
           address.zipcode.trim() !== ''
-      ) && 
-      primaryPhoneNumber.trim() !== ''; 
+      ) &&
+      primaryPhoneNumber.trim() !== '';
     setIsValidForm(isFormValid);
   };
 

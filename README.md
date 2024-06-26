@@ -34,6 +34,17 @@ To start the development server, run:
 npm run dev
 ```
 
+### Running the Application on Docker
+Build the application 
+```sh
+docker build -t nextjs-app .
+```
+
+Run the application 
+```sh
+docker run -p 3000:3000 nextjs-app
+```
+
 This will start the development server on [http://localhost:3000](http://localhost:3000).
 
 Log on using 

@@ -5,6 +5,7 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { GetServerSideProps } from 'next';
 import axios from 'axios';
 import { generateGridColDef } from '../app/utils/generateGridColDef';
+import ProtectedRoute from '@/app/components/ProtectedRoute';
 
 const PatientModal = lazy(() => import('../app/components/PatientModal'));
 const DeleteWarningDialog = lazy(
@@ -135,66 +136,68 @@ const PatientDataView = ({ initialPatients }: PatientDataViewProps) => {
   if (isError) return <div>Error loading data</div>;
 
   return (
-    <Container sx={{ padding: '50px' }}>
-      <Typography variant="h4" sx={{ paddingBottom: '20px' }}>
-        Patient Data
-      </Typography>
-      <Button onClick={handleAddClick}>Add a new Patient</Button>
-      <Box sx={{ height: 400, width: '100%' }}>
-        <DataGrid
-          slots={{
-            toolbar: GridToolbar,
-          }}
-          slotProps={{
-            toolbar: {
-              showQuickFilter: true,
-            },
-          }}
-          sx={{
-            backgroundColor: theme.palette.common.white,
-            '& .MuiDataGrid-columnHeader': {
+    <ProtectedRoute>
+      <Container sx={{ padding: '50px' }}>
+        <Typography variant="h4" sx={{ paddingBottom: '20px' }}>
+          Patient Data
+        </Typography>
+        <Button onClick={handleAddClick}>Add a new Patient</Button>
+        <Box sx={{ height: 400, width: '100%' }}>
+          <DataGrid
+            slots={{
+              toolbar: GridToolbar,
+            }}
+            slotProps={{
+              toolbar: {
+                showQuickFilter: true,
+              },
+            }}
+            sx={{
               backgroundColor: theme.palette.common.white,
-            },
-            '& .MuiDataGrid-footerContainer': {
-              backgroundColor: theme.palette.primary.main,
-              color: theme.palette.common.white,
-            },
-          }}
-          columns={generateGridColDef(
-            handleDeleteClick,
-            handleEditClick,
-            getAdditionalFields()
-          )}
-          rows={rows}
-        />
-      </Box>
-      <Suspense fallback={<div>Loading...</div>}>
-        <PatientModal
-          isOpen={patientModalIsOpen}
-          onCloseModal={() => {
-            setSelectedPatient(null);
-            setPatientModalIsOpen(false);
-          }}
-          onCreateNewPatient={handleCreatePatient}
-          patient={selectedPatient ?? null}
-          onEditPatient={handleEditPatient}
-        />
-        <DeleteWarningDialog
-          isOpen={warningDialogIsOpen}
-          onCloseModal={() => {
-            setSelectedPatient(null);
-            setWarningDialogIsOpen(false);
-          }}
-          onConfirmDeletion={handleDeletePatient}
-          patient={selectedPatient}
-        />
-        <MutationSnackbar
-          isOpen={!!mutationSnackbarMessage}
-          onCloseSnackbar={() => setMutationSnackbarMessage('')}
-          message={mutationSnackbarMessage}
-        />
-      </Suspense>
-    </Container>
+              '& .MuiDataGrid-columnHeader': {
+                backgroundColor: theme.palette.common.white,
+              },
+              '& .MuiDataGrid-footerContainer': {
+                backgroundColor: theme.palette.primary.main,
+                color: theme.palette.common.white,
+              },
+            }}
+            columns={generateGridColDef(
+              handleDeleteClick,
+              handleEditClick,
+              getAdditionalFields()
+            )}
+            rows={rows}
+          />
+        </Box>
+        <Suspense fallback={<div>Loading...</div>}>
+          <PatientModal
+            isOpen={patientModalIsOpen}
+            onCloseModal={() => {
+              setSelectedPatient(null);
+              setPatientModalIsOpen(false);
+            }}
+            onCreateNewPatient={handleCreatePatient}
+            patient={selectedPatient ?? null}
+            onEditPatient={handleEditPatient}
+          />
+          <DeleteWarningDialog
+            isOpen={warningDialogIsOpen}
+            onCloseModal={() => {
+              setSelectedPatient(null);
+              setWarningDialogIsOpen(false);
+            }}
+            onConfirmDeletion={handleDeletePatient}
+            patient={selectedPatient}
+          />
+          <MutationSnackbar
+            isOpen={!!mutationSnackbarMessage}
+            onCloseSnackbar={() => setMutationSnackbarMessage('')}
+            message={mutationSnackbarMessage}
+          />
+        </Suspense>
+      </Container>
+    </ProtectedRoute>
   );
 };
 

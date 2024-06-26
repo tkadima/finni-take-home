@@ -19,7 +19,8 @@ interface PatientData {
   date_of_birth: string;
   status: string;
   addresses: string; // JSON string
-  phone_numbers: string; // JSON string
+  primary_phone_number: string; 
+  secondary_phone_number: string;
   additional_fields: string; // JSON string
 }
 

@@ -40,7 +40,7 @@ export const generateGridColDef = (
       headerName: 'Phone Numbers',
       width: 200,
       renderCell: (params) => {
-        const phoneNumbers: string[] = JSON.parse(params.value);
+        const phoneNumbers: string[] = params.value;
         return phoneNumbers.map((phone) => phone).join(', ');
       },
     },

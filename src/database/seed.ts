@@ -50,7 +50,7 @@ async function seedDatabase() {
 
   // Insert 100 rows with random data
   const stmt = await db.prepare(
-    'INSERT INTO patients (first_name, middle_name, last_name, date_of_birth, status, addresses, phone_numbers, additional_fields) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
+    'INSERT INTO patients (first_name, middle_name, last_name, date_of_birth, status, addresses, primary_phone_number, secondary_phone_number, additional_fields) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
   );
   const statuses = ['Inquiry', 'Onboarding', 'Active', 'Churned'];
 
@@ -72,6 +72,9 @@ async function seedDatabase() {
         zipcode: faker.location.zipCode(),
       },
     ]);
+    const primaryPhoneNumber = faker.phone.number(); 
+    const secondaryPhoneNumber = faker.phone.number(); 
+
     const additionalFieldKeys = {
       'Preferred Language(s)': ['English', 'French', 'Spanish', 'Mandarin'],
       Medications: ['adderral', 'wellbutrin', 'hydroxyzine'],
@@ -84,11 +87,9 @@ async function seedDatabase() {
         'OCD',
       ],
     };
-
     const additionalFields = JSON.stringify(
       getRandomAdditionalFields(additionalFieldKeys)
     );
-    const phoneNumbers = JSON.stringify([faker.phone.number()]);
 
     await stmt.run(
       firstName,
@@ -97,7 +98,8 @@ async function seedDatabase() {
       dateOfBirth,
       status,
       addresses,
-      phoneNumbers,
+      primaryPhoneNumber,
+      secondaryPhoneNumber,   
       additionalFields
     );
   }

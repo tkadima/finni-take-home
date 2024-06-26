@@ -73,8 +73,8 @@ const PatientModal = ({
           },
         ],
         fields: patientAdditionalFields || {},
-        primaryPhoneNumber: JSON.parse(patient.phone_numbers)[0] || '',
-        secondaryPhoneNumber: JSON.parse(patient.phone_numbers)[1] || '',
+        primaryPhoneNumber: patient.primary_phone_number|| '',
+        secondaryPhoneNumber: patient.secondary_phone_number || '',
       });
     }
   }, [patient]);

@@ -3,8 +3,10 @@ import axios from 'axios';
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
-const useFetch = (url: string) => {
-  const { data, error } = useSWR(url, fetcher);
+const useFetch = (url: string, options?: { initialData?: any }) => {
+  const { data, error } = useSWR(url, fetcher, {
+    fallbackData: options?.initialData,
+  });
 
   const post = async (url: string, payload: any) => {
     try {

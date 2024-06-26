@@ -12,6 +12,8 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteWarningDialog from '../app/components/DeleteWarningDialog';
 import MutationSnackbar from '../app/components/MutationSnackbar';
+import { GetServerSideProps } from 'next';
+import axios from 'axios';
 
 const generateGridColDef = (
   handleDeleteClick: (id: number) => void,
@@ -84,11 +86,30 @@ const generateGridColDef = (
   ];
 };
 
-const PatientDataView = () => {
-  const { data, isLoading, isError, post, put, del } =
-    useFetch('/api/patients');
+export const getServerSideProps: GetServerSideProps = async () => {
+  const response = await axios.get('http://localhost:3000/api/patients');
+  const data = response.data;
+  return {
+    props: {
+      initialPatients: data,
+    },
+  };
+};
 
-  const rows = data?.map((patient: PatientData) => {
+type PatientDataViewProps = {
+  initialPatients: PatientData[];
+};
+const PatientDataView = ({ initialPatients }: PatientDataViewProps) => {
+  const {
+    data: patients,
+    isLoading,
+    isError,
+    post,
+    put,
+    del,
+  } = useFetch('/api/patients', { initialData: initialPatients });
+
+  const rows = patients.map((patient: PatientData) => {
     const additionalFields = JSON.parse(patient.additional_fields) || {};
     return {
       ...patient,
@@ -125,15 +146,19 @@ const PatientDataView = () => {
   };
 
   const handleEditClick = (id: number) => {
-    const patient = data.find((patient: PatientData) => patient.id === id);
-    setSelectedPatient(patient);
-    setPatientModalIsOpen(true);
+    const patient = patients.find((patient: PatientData) => patient.id === id);
+    if (patient) {
+      setSelectedPatient(patient);
+      setPatientModalIsOpen(true);
+    }
   };
 
   const handleDeleteClick = (id: number) => {
-    const patient = data.find((patient: PatientData) => patient.id === id);
-    setSelectedPatient(patient);
-    setWarningDialogIsOpen(true);
+    const patient = patients.find((patient: PatientData) => patient.id === id);
+    if (patient) {
+      setSelectedPatient(patient);
+      setWarningDialogIsOpen(true);
+    }
   };
 
   const handleCreatePatient = async (payload: any) => {

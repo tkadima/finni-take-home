@@ -6,6 +6,7 @@ import {
   DialogTitle,
   Typography,
 } from '@mui/material';
+import { useEffect } from 'react';
 
 type DeleteWarningDialogPropTypes = {
   isOpen: boolean;
@@ -20,7 +21,8 @@ const DeleteWarningDialog = ({
   patient,
   onConfirmDeletion,
 }: DeleteWarningDialogPropTypes) => {
-  if (!patient) return <div></div>;
+  if (!patient) return null;
+
   return (
     <Dialog open={isOpen} onClose={onCloseModal}>
       <DialogTitle>

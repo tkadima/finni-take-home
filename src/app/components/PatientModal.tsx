@@ -191,7 +191,7 @@ const PatientModal = ({
   };
 
   const validateForm = () => {
-    const { firstName, lastName, dob, status, addresses } = formData;
+    const { firstName, lastName, dob, status, addresses, primaryPhoneNumber } = formData;
     const isFormValid =
       firstName.trim() !== '' &&
       lastName.trim() !== '' &&
@@ -203,7 +203,8 @@ const PatientModal = ({
           address.city.trim() !== '' &&
           address.state.trim() !== '' &&
           address.zipcode.trim() !== ''
-      );
+      ) && 
+      primaryPhoneNumber.trim() !== ''; 
     setIsValidForm(isFormValid);
   };
 

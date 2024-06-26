@@ -4,7 +4,7 @@ import useFetch from '../hooks/useFetch';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { GetServerSideProps } from 'next';
 import axios from 'axios';
-import { generateGridColDef } from '../app/components/utils/generateGridColDef';
+import { generateGridColDef } from '../app/utils/generateGridColDef';
 
 const PatientModal = lazy(() => import('../app/components/PatientModal'));
 const DeleteWarningDialog = lazy(
@@ -68,7 +68,7 @@ const PatientDataView = ({ initialPatients }: PatientDataViewProps) => {
 
   const theme = useTheme();
 
-  const handleOpenNewPatientModal = () => {
+  const handleAddClick = () => {
     setSelectedPatient(null);
     setPatientModalIsOpen(true);
   };
@@ -138,7 +138,7 @@ const PatientDataView = ({ initialPatients }: PatientDataViewProps) => {
       <Typography variant="h4" sx={{ paddingBottom: '20px' }}>
         Patient Data
       </Typography>
-      <Button onClick={handleOpenNewPatientModal}>Add a new Patient</Button>
+      <Button onClick={handleAddClick}>Add a new Patient</Button>
       <Box sx={{ height: 400, width: '100%' }}>
         <DataGrid
           slots={{
@@ -181,8 +181,8 @@ const PatientDataView = ({ initialPatients }: PatientDataViewProps) => {
         <DeleteWarningDialog
           isOpen={warningDialogIsOpen}
           onCloseModal={() => {
-            setWarningDialogIsOpen(false);
             setSelectedPatient(null);
+            setWarningDialogIsOpen(false);
           }}
           onConfirmDeletion={handleDeletePatient}
           patient={selectedPatient}

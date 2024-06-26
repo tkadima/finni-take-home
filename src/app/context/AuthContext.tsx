@@ -14,8 +14,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
 
   const login = () => setIsAuthenticated(true);
-  const logout = () => { 
-    setIsAuthenticated(false)
+  const logout = () => {
+    setIsAuthenticated(false);
     router.push('/login');
   };
 

@@ -142,7 +142,7 @@ const PatientDataView = ({ initialPatients }: PatientDataViewProps) => {
           Patient Data
         </Typography>
         <Button onClick={handleAddClick}>Add a new Patient</Button>
-        <Box sx={{ height: 400, width: '100%' }}>
+        <Box sx={{  height: '100vh', width: '100%' }}>
           <DataGrid
             slots={{
               toolbar: GridToolbar,

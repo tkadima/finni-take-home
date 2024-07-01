@@ -68,16 +68,20 @@ const PatientDataView = ({ initialPatients }: PatientDataViewProps) => {
   const [mutationSnackbarMessage, setMutationSnackbarMessage] =
     useState<string>('');
 
+  const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
+
   const theme = useTheme();
 
   const handleAddClick = () => {
     setSelectedPatient(null);
+    setModalMode('create');
     setPatientModalIsOpen(true);
   };
 
   const handleEditClick = (id: number) => {
     const patient = patients.find((patient: PatientData) => patient.id === id);
     if (patient) {
+      setModalMode('edit');
       setSelectedPatient(patient);
       setPatientModalIsOpen(true);
     }
@@ -92,6 +96,7 @@ const PatientDataView = ({ initialPatients }: PatientDataViewProps) => {
   };
 
   const handleCreatePatient = async (payload: any) => {
+    console.log('new patient payload', payload);
     try {
       const created = await post('/api/patients', payload);
       setMutationSnackbarMessage(
@@ -104,6 +109,7 @@ const PatientDataView = ({ initialPatients }: PatientDataViewProps) => {
   };
 
   const handleEditPatient = async (payload: any) => {
+    console.log('handle edit payload', payload);
     try {
       if (selectedPatient) {
         const updated = await put(
@@ -114,7 +120,7 @@ const PatientDataView = ({ initialPatients }: PatientDataViewProps) => {
           `Updated patient: ${updated.firstName} ${updated.lastName}`
         );
       }
-      setSelectedPatient(null); 
+      setSelectedPatient(null);
       setPatientModalIsOpen(false);
     } catch (error) {
       console.log('Error updating patient');
@@ -127,7 +133,7 @@ const PatientDataView = ({ initialPatients }: PatientDataViewProps) => {
         const deleted = await del(`/api/patients/${selectedPatient.id}`);
         setMutationSnackbarMessage(deleted.message);
         setWarningDialogIsOpen(false);
-        setSelectedPatient(null); 
+        setSelectedPatient(null);
       }
     } catch (error) {
       console.error('Error deleting patient:', error);
@@ -144,7 +150,7 @@ const PatientDataView = ({ initialPatients }: PatientDataViewProps) => {
           Patient Data
         </Typography>
         <Button onClick={handleAddClick}>Add a new Patient</Button>
-        <Box sx={{  height: '100vh', width: '100%' }}>
+        <Box sx={{ height: '100vh', width: '100%' }}>
           <DataGrid
             slots={{
               toolbar: GridToolbar,
@@ -174,6 +180,7 @@ const PatientDataView = ({ initialPatients }: PatientDataViewProps) => {
         </Box>
         <Suspense fallback={<div>Loading...</div>}>
           <PatientModal
+            mode={modalMode}
             isOpen={patientModalIsOpen}
             onCloseModal={() => {
               setSelectedPatient(null);

@@ -24,10 +24,12 @@
 
 ### Running the Application
 
-Before running the application, run the seed script 
-```sh 
+Before running the application, run the seed script
+
+```sh
 npm run seed
 ```
+
 To start the development server, run:
 
 ```sh
@@ -35,18 +37,21 @@ npm run dev
 ```
 
 ### Running the Application on Docker
-Build the application 
+
+Build the application
+
 ```sh
 docker build -t nextjs-app .
 ```
 
-Run the application 
+Run the application
+
 ```sh
 docker run -p 3000:3000 nextjs-app
 ```
 
 This will start the development server on [http://localhost:3000](http://localhost:3000).
 
-Log on using 
-email: admin@finnihealth.com 
+Log on using
+email: admin@finnihealth.com
 password: test

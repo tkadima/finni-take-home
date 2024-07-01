@@ -12,7 +12,6 @@ import {
 } from '@mui/material';
 import { Add as AddIcon, Remove as RemoveIcon } from '@mui/icons-material';
 
-
 const initialFormDataState = {
   firstName: '',
   middleName: '',
@@ -25,7 +24,7 @@ const initialFormDataState = {
   primaryPhoneNumber: '',
   secondaryPhoneNumber: '',
   fields: {},
-}
+};
 
 type PatientModalPropTypes = {
   isOpen: boolean;
@@ -33,6 +32,7 @@ type PatientModalPropTypes = {
   patient: PatientData | null;
   onCreateNewPatient: (formData: PatientFormData) => void;
   onEditPatient: (formData: PatientFormData) => void;
+  mode: 'create' | 'edit';
 };
 
 const PatientModal = ({
@@ -41,16 +41,15 @@ const PatientModal = ({
   patient,
   onCreateNewPatient,
   onEditPatient,
+  mode,
 }: PatientModalPropTypes) => {
-
-  const [formData, setFormData] = useState<PatientFormData>(initialFormDataState); 
+  const [formData, setFormData] =
+    useState<PatientFormData>(initialFormDataState);
   const [tabIndex, setTabIndex] = useState<number>(0);
   const [isValidForm, setIsValidForm] = useState<boolean>(false);
 
   useEffect(() => {
-    if (isOpen) { 
-    if (patient) {
-      // move this to index
+    if (mode === 'edit' && patient) {
       const patientAddress = JSON.parse(patient.addresses).map(
         (patientAddress: Address) => ({
           addressLine1: patientAddress.addressLine1,
@@ -62,7 +61,7 @@ const PatientModal = ({
       );
 
       const patientAdditionalFields = JSON.parse(patient.additional_fields);
-    
+
       setFormData({
         firstName: patient.first_name,
         middleName: patient.middle_name || '',
@@ -74,12 +73,10 @@ const PatientModal = ({
         primaryPhoneNumber: patient.primary_phone_number,
         secondaryPhoneNumber: patient.secondary_phone_number || '',
       });
+    } else {
+      setFormData(initialFormDataState);
     }
-  }
-  else { 
-      setFormData(initialFormDataState); 
-  }
-  }, [patient, isOpen]);
+  }, [patient]);
 
   const handleTabChange = (_event: any, newIndex: number) => {
     setTabIndex(newIndex);
@@ -177,7 +174,7 @@ const PatientModal = ({
 
   const handleSubmit = () => {
     setTabIndex(0);
-    if (patient) onEditPatient(formData);
+    if (mode === 'edit') onEditPatient(formData);
     else onCreateNewPatient(formData);
   };
 

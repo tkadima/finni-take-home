@@ -114,6 +114,7 @@ const PatientDataView = ({ initialPatients }: PatientDataViewProps) => {
           `Updated patient: ${updated.firstName} ${updated.lastName}`
         );
       }
+      setSelectedPatient(null); 
       setPatientModalIsOpen(false);
     } catch (error) {
       console.log('Error updating patient');
@@ -126,6 +127,7 @@ const PatientDataView = ({ initialPatients }: PatientDataViewProps) => {
         const deleted = await del(`/api/patients/${selectedPatient.id}`);
         setMutationSnackbarMessage(deleted.message);
         setWarningDialogIsOpen(false);
+        setSelectedPatient(null); 
       }
     } catch (error) {
       console.error('Error deleting patient:', error);

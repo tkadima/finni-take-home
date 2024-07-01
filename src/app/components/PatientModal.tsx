@@ -12,6 +12,21 @@ import {
 } from '@mui/material';
 import { Add as AddIcon, Remove as RemoveIcon } from '@mui/icons-material';
 
+
+const initialFormDataState = {
+  firstName: '',
+  middleName: '',
+  lastName: '',
+  dob: '',
+  status: '',
+  addresses: [
+    { addressLine1: '', addressLine2: '', city: '', state: '', zipcode: '' },
+  ],
+  primaryPhoneNumber: '',
+  secondaryPhoneNumber: '',
+  fields: {},
+}
+
 type PatientModalPropTypes = {
   isOpen: boolean;
   onCloseModal: () => void;
@@ -27,24 +42,15 @@ const PatientModal = ({
   onCreateNewPatient,
   onEditPatient,
 }: PatientModalPropTypes) => {
-  const [formData, setFormData] = useState<PatientFormData>({
-    firstName: '',
-    middleName: '',
-    lastName: '',
-    dob: '',
-    status: '',
-    addresses: [
-      { addressLine1: '', addressLine2: '', city: '', state: '', zipcode: '' },
-    ],
-    primaryPhoneNumber: '',
-    secondaryPhoneNumber: '',
-    fields: {},
-  });
+
+  const [formData, setFormData] = useState<PatientFormData>(initialFormDataState); 
   const [tabIndex, setTabIndex] = useState<number>(0);
   const [isValidForm, setIsValidForm] = useState<boolean>(false);
 
   useEffect(() => {
+    if (isOpen) { 
     if (patient) {
+      // move this to index
       const patientAddress = JSON.parse(patient.addresses).map(
         (patientAddress: Address) => ({
           addressLine1: patientAddress.addressLine1,
@@ -56,52 +62,24 @@ const PatientModal = ({
       );
 
       const patientAdditionalFields = JSON.parse(patient.additional_fields);
-
+    
       setFormData({
-        firstName: patient.first_name || '',
+        firstName: patient.first_name,
         middleName: patient.middle_name || '',
-        lastName: patient.last_name || '',
-        dob: patient.date_of_birth || '',
-        status: patient.status || '',
-        addresses: patientAddress || [
-          {
-            addressLine1: '',
-            addressLine2: '',
-            city: '',
-            state: '',
-            zipcode: '',
-          },
-        ],
+        lastName: patient.last_name,
+        dob: patient.date_of_birth,
+        status: patient.status,
+        addresses: patientAddress,
         fields: patientAdditionalFields || {},
-        primaryPhoneNumber: patient.primary_phone_number || '',
+        primaryPhoneNumber: patient.primary_phone_number,
         secondaryPhoneNumber: patient.secondary_phone_number || '',
       });
     }
-  }, [patient]);
-
-  useEffect(() => {
-    if (!isOpen) {
-      setFormData({
-        firstName: '',
-        middleName: '',
-        lastName: '',
-        dob: '',
-        status: '',
-        addresses: [
-          {
-            addressLine1: '',
-            addressLine2: '',
-            city: '',
-            state: '',
-            zipcode: '',
-          },
-        ],
-        primaryPhoneNumber: '',
-        secondaryPhoneNumber: '',
-        fields: {},
-      });
-    }
-  }, [isOpen]);
+  }
+  else { 
+      setFormData(initialFormDataState); 
+  }
+  }, [patient, isOpen]);
 
   const handleTabChange = (_event: any, newIndex: number) => {
     setTabIndex(newIndex);
@@ -198,6 +176,7 @@ const PatientModal = ({
   };
 
   const handleSubmit = () => {
+    setTabIndex(0);
     if (patient) onEditPatient(formData);
     else onCreateNewPatient(formData);
   };

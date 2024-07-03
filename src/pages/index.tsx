@@ -52,7 +52,7 @@ const PatientDataView = ({ initialPatients }: PatientDataViewProps) => {
     return {
       ...patient,
       full_name: `${patient.last_name}, ${patient.first_name} ${patient.middle_name}`,
-      phone_numbers: `${patient.primary_phone_number}, ${patient.secondary_phone_number}`,
+      phone_numbers: `${patient.primary_phone_number}${patient.secondary_phone_number ? ', ' + patient.secondary_phone_number : ''}`,
       ...additionalFields,
     };
   });

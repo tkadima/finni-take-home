@@ -96,7 +96,6 @@ const PatientDataView = ({ initialPatients }: PatientDataViewProps) => {
   };
 
   const handleCreatePatient = async (payload: any) => {
-    console.log('new patient payload', payload);
     try {
       const created = await post('/api/patients', payload);
       setMutationSnackbarMessage(

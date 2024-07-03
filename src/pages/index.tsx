@@ -16,13 +16,22 @@ const MutationSnackbar = lazy(
 );
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const response = await axios.get('http://localhost:3000/api/patients');
-  const data = response.data;
-  return {
-    props: {
-      initialPatients: data,
-    },
-  };
+  try {
+    const response = await axios.get('http://localhost:3000/api/patients');
+    const data = response.data;
+    return {
+      props: {
+        initialPatients: data,
+      },
+    };
+  } catch (error) { 
+    console.error("Error fetching patients data:", error);
+    return {
+      props: {
+        initialPatients: [],
+      }
+    }
+  }
 };
 
 type PatientDataViewProps = {
@@ -108,7 +117,6 @@ const PatientDataView = ({ initialPatients }: PatientDataViewProps) => {
   };
 
   const handleEditPatient = async (payload: any) => {
-    console.log('handle edit payload', payload);
     try {
       if (selectedPatient) {
         const updated = await put(

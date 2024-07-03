@@ -363,7 +363,7 @@ const PatientModal = ({
             {formData.fields &&
               Object.keys(formData.fields).map(
                 (field: string, index: number) => (
-                  <Box sx={{ display: 'flex', gap: 2 }}>
+                  <Box key={index} sx={{ display: 'flex', gap: 2 }}>
                     <TextField
                       label="Name"
                       name={`configurableField-name-${index}`}
